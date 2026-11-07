@@ -4,6 +4,8 @@ import Base from '../layouts/Base.astro';
 import Bandeau from '../components/Bandeau.astro';
 import Image from '../components/Image.astro';
 import Rdv from '../components/Rdv.astro';
+import Questionnaire from '../components/Questionnaire.astro';
+import { QUESTIONNAIRES } from '../data/questionnaires';
 import CarteArticle from '../components/CarteArticle.astro';
 import { schemaFilAriane } from '../data/schema';
 
@@ -48,7 +50,7 @@ const jsonLd = [
     chapo="Épargner, préparer sa retraite, protéger ses proches et transmettre : une stratégie construite à partir de vos objectifs, et revue avec vous chaque année."
     ariane={[{ nom: 'Accueil', href: '/' }, { nom: 'Gestion de patrimoine' }]}
   >
-    <div class="actions"><a class="bouton bouton--blanc" href="/contact/?sujet=epargne-retraite">Demander un bilan patrimonial</a></div>
+    <div class="actions"><a class="bouton bouton--blanc" href="#devis">Demander un bilan patrimonial</a></div>
   </Bandeau>
 
   <section class="section">
@@ -77,6 +79,11 @@ const jsonLd = [
       </div>
     </div>
   </section>
+
+  <section class="section section--bleu">
+    <div class="conteneur"><Questionnaire q={QUESTIONNAIRES.patrimoine} /></div>
+  </section>
+
 
   <section class="section section--sable">
     <div class="conteneur">

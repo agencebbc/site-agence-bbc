@@ -4,6 +4,8 @@ import Base from '../layouts/Base.astro';
 import Bandeau from '../components/Bandeau.astro';
 import Image from '../components/Image.astro';
 import Rdv from '../components/Rdv.astro';
+import Questionnaire from '../components/Questionnaire.astro';
+import { QUESTIONNAIRES } from '../data/questionnaires';
 import CarteArticle from '../components/CarteArticle.astro';
 import { schemaFilAriane } from '../data/schema';
 import type { CleePhoto } from '../data/photos';
@@ -46,7 +48,7 @@ const jsonLd = [schemaFilAriane(Astro.site!, [{ nom: 'Accueil', chemin: '/' }, {
     chapo="Artisans, commerçants, vignerons, transporteurs, PME : des garanties dimensionnées pour votre activité, et un interlocuteur qui connaît votre métier."
     ariane={[{ nom: 'Accueil', href: '/' }, { nom: 'Assurance des entreprises' }]}
   >
-    <div class="actions"><a class="bouton bouton--blanc" href="/contact/?sujet=entreprises">Faire auditer mes contrats</a></div>
+    <div class="actions"><a class="bouton bouton--blanc" href="#devis">Faire auditer mes contrats</a></div>
   </Bandeau>
 
   <section class="section">
@@ -59,6 +61,11 @@ const jsonLd = [schemaFilAriane(Astro.site!, [{ nom: 'Accueil', chemin: '/' }, {
       </ul>
     </div>
   </section>
+
+  <section class="section section--bleu">
+    <div class="conteneur"><Questionnaire q={QUESTIONNAIRES.entreprises} /></div>
+  </section>
+
 
   <section class="section section--blanc">
     <div class="conteneur">

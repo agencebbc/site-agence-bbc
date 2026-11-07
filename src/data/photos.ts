@@ -5,6 +5,12 @@
 export type Photo = { id: string; alt: string; auteur: string; page: string; position?: string };
 
 export const PHOTOS = {
+  vignesAude: {
+    id: 'photo-1543418219-44e30b057fea',
+    alt: 'Rangs de vigne sous le soleil rasant, près de Carcassonne',
+    auteur: 'Boudewijn Boer',
+    page: 'https://unsplash.com/photos/qT515JdZNy8',
+  },
   fontfroide: {
     id: 'photo-1671576631765-2eab4a95b0bb',
     alt: "L'abbaye de Fontfroide, près de Narbonne",
@@ -82,6 +88,36 @@ export const PHOTOS = {
     alt: 'Intérieur d’une boulangerie-pâtisserie',
     auteur: 'Nick Karvounis',
     page: 'https://unsplash.com/photos/jN_M0McVNeI',
+  },
+  collection: {
+    id: 'photo-1681246357720-62517d7fc34e',
+    alt: 'Voiture de collection sur une route de campagne',
+    auteur: 'Tom Kitto',
+    page: 'https://unsplash.com/photos/9fqoXSscgcE',
+  },
+  van: {
+    id: 'photo-1760612393693-8303856dfbed',
+    alt: 'Van aménagé garé face à la mer au coucher du soleil',
+    auteur: 'Hasse Lossius',
+    page: 'https://unsplash.com/photos/PvQ4RPTuXOQ',
+  },
+  moto: {
+    id: 'photo-1716741011671-db4d7c6a8293',
+    alt: 'Motard sur une route de montagne',
+    auteur: 'Aritra Roy',
+    page: 'https://unsplash.com/photos/GM5cHEq9rOk',
+  },
+  voilier: {
+    id: 'photo-1641790536702-8a472fa78eec',
+    alt: 'Voilier près d’une côte rocheuse',
+    auteur: 'Mike Swigunski',
+    page: 'https://unsplash.com/photos/XClsGH4JuhA',
+  },
+  trottinette: {
+    id: 'photo-1778182295955-9fbc87a7053a',
+    alt: 'Deux personnes en trottinette électrique par une journée ensoleillée',
+    auteur: 'Margo Evardson',
+    page: 'https://unsplash.com/photos/moi1opcj5HM',
   },
 } satisfies Record<string, Photo>;
 

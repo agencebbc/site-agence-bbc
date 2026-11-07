@@ -4,6 +4,8 @@ import Base from '../layouts/Base.astro';
 import Bandeau from '../components/Bandeau.astro';
 import Image from '../components/Image.astro';
 import Rdv from '../components/Rdv.astro';
+import Questionnaire from '../components/Questionnaire.astro';
+import { QUESTIONNAIRES } from '../data/questionnaires';
 import CarteArticle from '../components/CarteArticle.astro';
 import { schemaFilAriane } from '../data/schema';
 
@@ -41,7 +43,7 @@ const jsonLd = [
     chapo="Votre voiture, votre logement, votre santé, votre famille : toutes vos assurances du quotidien, suivies par une équipe que vous connaissez."
     ariane={[{ nom: 'Accueil', href: '/' }, { nom: 'Particuliers' }]}
   >
-    <div class="actions"><a class="bouton bouton--blanc" href="/contact/?sujet=particuliers">Faire le point sur mes contrats</a></div>
+    <div class="actions"><a class="bouton bouton--blanc" href="#devis">Mon devis en 1 minute</a></div>
   </Bandeau>
 
   <section class="section">
@@ -53,6 +55,11 @@ const jsonLd = [
       </ul>
     </div>
   </section>
+
+  <section class="section section--bleu">
+    <div class="conteneur"><Questionnaire q={QUESTIONNAIRES.particuliers} /></div>
+  </section>
+
 
   <section class="section section--blanc">
     <div class="conteneur split">

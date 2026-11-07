@@ -1,0 +1,94 @@
+---
+import Base from '../layouts/Base.astro';
+import Bandeau from '../components/Bandeau.astro';
+import Image from '../components/Image.astro';
+import Questionnaire from '../components/Questionnaire.astro';
+import Rdv from '../components/Rdv.astro';
+import { QUESTIONNAIRES } from '../data/questionnaires';
+import { schemaFilAriane } from '../data/schema';
+import type { CleePhoto } from '../data/photos';
+
+const produits: { titre: string; choix: string; photo: CleePhoto; texte: string; points: string[] }[] = [
+  { titre: 'Voiture de collection', choix: 'Voiture de collection', photo: 'collection', texte: 'Une valeur reconnue, pas une cote d’occasion : votre ancienne est assurée pour ce qu’elle vaut vraiment.', points: ['Valeur agréée après expertise', 'Usage loisirs, rallyes et rassemblements', 'Assistance adaptée aux véhicules anciens'] },
+  { titre: 'Camping-car et van', choix: 'Camping-car ou van', photo: 'van', texte: 'Le véhicule, son aménagement et vos affaires à bord, en France comme sur les routes d’Europe.', points: ['Aménagements et équipements couverts', 'Contenu et effets personnels', 'Assistance voyage et rapatriement'] },
+  { titre: 'Moto et scooter', choix: 'Moto ou scooter', photo: 'moto', texte: 'Du scooter du quotidien à la routière des week-ends, avec la protection du pilote.', points: ['Garantie du pilote', 'Équipement et casque', 'Formules hivernage pour qui roule à la belle saison'] },
+  { titre: 'Bateau', choix: 'Bateau', photo: 'voilier', texte: 'Voilier ou bateau à moteur, au port de Gruissan, de Port-la-Nouvelle ou ailleurs.', points: ['Responsabilité civile et dommages', 'Vol et dommages au port comme en navigation', 'Assistance et remorquage'] },
+  { titre: 'Trottinette et vélo électriques', choix: 'Trottinette ou vélo électrique', photo: 'trottinette', texte: 'Une trottinette électrique doit être assurée en responsabilité civile. Nous vérifions aussi votre propre protection.', points: ['Responsabilité civile obligatoire pour les engins motorisés', 'Vol et dommages selon la formule', 'Protection en cas d’accident'] },
+];
+
+const faq = [
+  { q: 'Faut-il assurer une trottinette électrique ?', r: 'Oui. Une trottinette électrique est un engin de déplacement personnel motorisé : son utilisateur doit être assuré en responsabilité civile pour les dommages causés aux autres. Votre assurance habitation ne le couvre pas toujours, il faut le vérifier.' },
+  { q: 'Qu’est-ce que la valeur agréée pour une voiture de collection ?', r: 'C’est une valeur fixée à l’avance avec l’assureur, souvent après expertise. En cas de sinistre total, l’indemnisation repose sur cette valeur, et non sur une cote d’occasion qui sous-estime souvent les véhicules anciens.' },
+  { q: 'Puis-je suspendre l’assurance de ma moto l’hiver ?', r: 'Certaines formules réduisent les garanties pendant la période où la moto ne roule pas, tout en la gardant assurée contre le vol ou l’incendie au garage. Nous regardons avec vous ce qui est adapté à votre usage.' },
+];
+
+const site = Astro.site!;
+const jsonLd = [
+  schemaFilAriane(site, [{ nom: 'Accueil', chemin: '/' }, { nom: 'Passion', chemin: '/passion/' }]),
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })) },
+];
+---
+<Base
+  titre="Assurance voiture de collection, camping-car, moto, bateau à Narbonne"
+  description="Voiture de collection, camping-car, van, moto, bateau, trottinette électrique : l'agence BBC à Narbonne assure vos passions. Devis en une minute."
+  jsonLd={jsonLd}
+>
+  <Bandeau
+    photo="collection"
+    titre="Assurez votre passion"
+    chapo="Voiture de collection, camping-car, moto, bateau, trottinette : ce qui vous fait vibrer mérite une assurance pensée pour lui."
+    ariane={[{ nom: 'Accueil', href: '/' }, { nom: 'Passion' }]}
+  >
+    <div class="actions"><a class="bouton bouton--blanc" href="#devis">Mon devis en 1 minute</a></div>
+  </Bandeau>
+
+  <section class="section">
+    <div class="conteneur">
+      <hr class="filet" />
+      <h2>Ce que nous assurons</h2>
+      <ul class="produits">
+        {produits.map((p) => (
+          <li class="produit">
+            <Image photo={p.photo} ratio={3 / 2} sizes="(min-width: 66rem) 24rem, (min-width: 44rem) 50vw, 100vw" />
+            <div class="produit__corps">
+              <h3>{p.titre}</h3>
+              <p>{p.texte}</p>
+              <ul>{p.points.map((pt) => <li>{pt}</li>)}</ul>
+              <a class="bouton" href={`?choix=${encodeURIComponent(p.choix)}#devis`}>Devis {p.titre.toLowerCase()}</a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--bleu">
+    <div class="conteneur"><Questionnaire q={QUESTIONNAIRES.passion} /></div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur" style="max-width:56rem">
+      <h2>Questions fréquentes</h2>
+      {faq.map((f) => <details class="faq"><summary>{f.q}</summary><p>{f.r}</p></details>)}
+      <Rdv sujet="passion" titre="Une question sur votre véhicule ?" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .produits { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1.4rem; }
+  @media (min-width: 44rem) { .produits { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 66rem) { .produits { grid-template-columns: repeat(3, 1fr); } }
+  .produit { background: var(--blanc); border-radius: var(--rayon-photo); overflow: hidden; box-shadow: var(--ombre); display: flex; flex-direction: column; }
+  .produit :global(img) { aspect-ratio: 3 / 2; object-fit: cover; width: 100%; }
+  .produit__corps { padding: 1.4rem 1.4rem 1.6rem; display: flex; flex-direction: column; flex: 1; }
+  .produit h3 { font-size: 1.35rem; }
+  .produit p { color: var(--gris); }
+  .produit ul { list-style: none; padding: 0; margin: 0 0 1.3rem; display: grid; gap: 0.45rem; flex: 1; }
+  .produit li { padding-left: 1.5rem; position: relative; font-size: 0.97rem; }
+  .produit li::before { content: ''; position: absolute; left: 0; top: 0.45em; width: 0.8rem; height: 0.5rem; border-left: 2px solid var(--robine); border-bottom: 2px solid var(--robine); transform: rotate(-45deg); }
+  .produit .bouton { align-self: flex-start; }
+  .faq { border-bottom: 1px solid var(--pierre); padding: 1rem 0; }
+  .faq summary { font-family: var(--serif); font-weight: 600; font-size: 1.15rem; cursor: pointer; }
+  .faq p { margin: 0.7rem 0 0; color: var(--gris); }
+</style>

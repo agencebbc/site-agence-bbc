@@ -36,6 +36,7 @@ const a = AGENCE;
       <label for="sujet">Votre demande concerne</label>
       <select id="sujet" name="sujet">
         {Object.entries(CATEGORIES).map(([id, c]) => <option value={id}>{c.titre}</option>)}
+        <option value="passion">Passion : collection, camping-car, moto, bateau</option>
         <option value="autre">Autre demande</option>
       </select>
 

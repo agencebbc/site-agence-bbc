@@ -1,0 +1,202 @@
+---
+// Questionnaire pas à pas qui aboutit à une demande de rappel (Netlify Forms).
+// Sans JavaScript, toutes les questions s'affichent à la suite et le formulaire fonctionne quand même.
+import type { Questionnaire } from '../data/questionnaires';
+interface Props { q: Questionnaire }
+const { q } = Astro.props;
+const total = q.questions.length + 1;
+const id = q.nom;
+---
+<section class="qz" id="devis" aria-labelledby={`${id}-titre`}>
+  <div class="qz__tete">
+    <h2 id={`${id}-titre`}>{q.titre}</h2>
+    <p>{q.intro}</p>
+    <div class="qz__progression" aria-hidden="true"><span></span></div>
+    <p class="qz__etape-num" aria-live="polite"></p>
+  </div>
+
+  <form class="qz__form" name={q.nom} method="POST" action="/contact/merci/" data-netlify="true" netlify-honeypot="site-web" data-qz>
+    <input type="hidden" name="form-name" value={q.nom} />
+    <input type="hidden" name="page" value={Astro.url.pathname} />
+    <p class="qz__piege"><label>Ne pas remplir : <input name="site-web" tabindex="-1" autocomplete="off" /></label></p>
+
+    {q.questions.map((qu, i) => (
+      <fieldset class="qz__etape" data-etape={i}>
+        <legend>{qu.question}</legend>
+        {qu.aide && <p class="qz__aide">{qu.aide}</p>}
+        {qu.type === 'choix' && (
+          <div class="qz__options">
+            {qu.options.map((o) => (
+              <label class="qz__option">
+                <input type="radio" name={qu.nom} value={o} required />
+                <span>{o}</span>
+              </label>
+            ))}
+          </div>
+        )}
+        {qu.type === 'multi' && (
+          <div class="qz__options">
+            {qu.options.map((o) => (
+              <label class="qz__option qz__option--multi">
+                <input type="checkbox" name={qu.nom} value={o} />
+                <span>{o}</span>
+              </label>
+            ))}
+          </div>
+        )}
+        {qu.type === 'texte' && (
+          <div class="qz__champs">
+            {qu.champs.map((c) => (
+              <label class="qz__champ">
+                <span>{c.label}</span>
+                <input name={c.nom} required={c.requis} placeholder={c.placeholder} />
+              </label>
+            ))}
+          </div>
+        )}
+        <div class="qz__nav">
+          {i > 0 && <button type="button" class="qz__retour" data-retour>Retour</button>}
+          <button type="button" class="bouton qz__suivant" data-suivant>Continuer</button>
+        </div>
+      </fieldset>
+    ))}
+
+    <fieldset class="qz__etape" data-etape={q.questions.length}>
+      <legend>Comment vous recontacter ?</legend>
+      <div class="qz__champs">
+        <label class="qz__champ"><span>Nom et prénom</span><input name="nom" autocomplete="name" required /></label>
+        <label class="qz__champ"><span>Téléphone</span><input name="telephone" type="tel" autocomplete="tel" required /></label>
+        <label class="qz__champ"><span>E-mail <em>(facultatif)</em></span><input name="email" type="email" autocomplete="email" /></label>
+      </div>
+      <p class="qz__sous-legende">Quand préférez-vous être rappelé ?</p>
+      <div class="qz__options qz__options--ligne">
+        {['Le matin', 'L’après-midi', 'Peu importe'].map((o) => (
+          <label class="qz__option"><input type="radio" name="creneau" value={o} /><span>{o}</span></label>
+        ))}
+      </div>
+      <label class="qz__consentement">
+        <input type="checkbox" name="consentement" value="oui" required />
+        <span>J’accepte que l’agence utilise ces informations pour me recontacter au sujet de ma demande. <a href="/confidentialite/">Confidentialité</a></span>
+      </label>
+      <div class="qz__nav">
+        <button type="button" class="qz__retour" data-retour>Retour</button>
+        <button type="submit" class="bouton">Être rappelé</button>
+      </div>
+    </fieldset>
+  </form>
+</section>
+
+<script is:inline define:vars={{ total }}>
+  document.querySelectorAll('[data-qz]').forEach(function (form) {
+    var racine = form.closest('.qz');
+    var etapes = Array.prototype.slice.call(form.querySelectorAll('.qz__etape'));
+    var barre = racine.querySelector('.qz__progression span');
+    var num = racine.querySelector('.qz__etape-num');
+    var courant = 0;
+    racine.classList.add('qz--actif');
+
+    function montrer(n, focus) {
+      courant = n;
+      etapes.forEach(function (e, i) { e.hidden = i !== n; });
+      barre.style.width = Math.round(((n + 1) / total) * 100) + '%';
+      num.textContent = 'Étape ' + (n + 1) + ' sur ' + total;
+      if (focus) {
+        var champ = etapes[n].querySelector('input:not([type=hidden]), select, textarea');
+        if (champ) champ.focus({ preventScroll: true });
+        var haut = racine.getBoundingClientRect().top + window.scrollY - 90;
+        if (window.scrollY > haut) window.scrollTo({ top: haut, behavior: 'smooth' });
+      }
+    }
+    function valide(n) {
+      var champs = etapes[n].querySelectorAll('input, select, textarea');
+      for (var i = 0; i < champs.length; i++) {
+        if (!champs[i].checkValidity()) { champs[i].reportValidity(); return false; }
+      }
+      return true;
+    }
+    form.addEventListener('click', function (ev) {
+      if (ev.target.closest('[data-suivant]')) { if (valide(courant)) montrer(courant + 1, true); }
+      if (ev.target.closest('[data-retour]')) montrer(courant - 1, true);
+    });
+    // Un choix unique fait passer à la question suivante.
+    form.addEventListener('change', function (ev) {
+      var t = ev.target;
+      if (t.type === 'radio' && t.name !== 'creneau' && courant < etapes.length - 1) {
+        setTimeout(function () { montrer(courant + 1, true); }, 220);
+      }
+    });
+    // Pré-sélection depuis l'adresse (?choix=Moto ou scooter)
+    var pre = new URLSearchParams(location.search).get('choix');
+    if (pre) {
+      var r = form.querySelector('.qz__etape[data-etape="0"] input[value="' + pre.replace(/"/g, '') + '"]');
+      if (r) { r.checked = true; montrer(1, false); return; }
+    }
+    montrer(0, false);
+  });
+</script>
+
+<style>
+  .qz {
+    background: var(--blanc); border-radius: 24px; padding: clamp(1.4rem, 4vw, 2.6rem);
+    box-shadow: 0 30px 60px -35px rgba(23, 36, 86, 0.55); border: 1px solid var(--pierre);
+    max-width: 46rem; margin-inline: auto; scroll-margin-top: 6rem;
+  }
+  .qz__tete h2 { margin-bottom: 0.3rem; font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem); }
+  .qz__tete > p { color: var(--gris); margin-bottom: 1.2rem; }
+  .qz__progression { display: none; height: 6px; background: var(--robine-clair); border-radius: 99px; overflow: hidden; }
+  .qz__progression span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--robine), var(--rouge)); border-radius: 99px; transition: width 300ms ease; }
+  .qz__etape-num { display: none; font-size: 0.85rem; color: var(--gris); margin: 0.5rem 0 0; }
+  .qz--actif .qz__progression, .qz--actif .qz__etape-num { display: block; }
+
+  .qz__etape { border: 0; padding: 0; margin: 1.6rem 0 0; min-width: 0; }
+  .qz__etape[hidden] { display: none; }
+  .qz--actif .qz__etape:not([hidden]) { animation: apparait 260ms ease both; }
+  @keyframes apparait { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: none; } }
+  .qz legend { font-family: var(--serif); font-weight: 600; font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.55rem); line-height: 1.25; padding: 0; margin-bottom: 1rem; }
+  .qz__aide { color: var(--gris); font-size: 0.92rem; margin: -0.5rem 0 1rem; }
+
+  .qz__options { display: grid; gap: 0.6rem; }
+  @media (min-width: 36rem) { .qz__options { grid-template-columns: 1fr 1fr; } }
+  .qz__options--ligne { grid-template-columns: repeat(3, 1fr) !important; }
+  .qz__option { position: relative; cursor: pointer; }
+  .qz__option input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .qz__option span {
+    display: flex; align-items: center; gap: 0.7rem; min-height: 3.5rem; height: 100%;
+    padding: 0.8rem 1rem; border: 1.5px solid var(--pierre); border-radius: 14px; background: var(--fond);
+    font-weight: 600; line-height: 1.3; transition: border-color 120ms, background 120ms, box-shadow 120ms;
+  }
+  .qz__option span::before {
+    content: ''; flex: none; width: 1.15rem; height: 1.15rem; border-radius: 50%;
+    border: 2px solid #a9b2c9; background: var(--blanc); transition: all 120ms;
+  }
+  .qz__option--multi span::before { border-radius: 5px; }
+  .qz__option:hover span { border-color: var(--robine); background: var(--blanc); }
+  .qz__option input:focus-visible + span { outline: 3px solid var(--robine); outline-offset: 2px; }
+  .qz__option input:checked + span { border-color: var(--robine); background: var(--robine-clair); box-shadow: 0 0 0 1px var(--robine); }
+  .qz__option input:checked + span::before { border-color: var(--robine); background: var(--robine); box-shadow: inset 0 0 0 3px var(--blanc); }
+  .qz__options--ligne .qz__option span { min-height: 3rem; justify-content: center; font-size: 0.92rem; }
+  .qz__options--ligne .qz__option span::before { display: none; }
+
+  .qz__champs { display: grid; gap: 0.9rem; }
+  .qz__champ { display: grid; gap: 0.35rem; font-weight: 600; }
+  .qz__champ em { font-weight: 400; color: var(--gris); font-style: normal; }
+  .qz__champ input {
+    font: inherit; font-weight: 400; font-size: 1.05rem; padding: 0.85rem 1rem;
+    border: 1.5px solid var(--pierre); border-radius: 12px; background: var(--fond); color: var(--encre);
+  }
+  .qz__champ input:focus { border-color: var(--robine); background: var(--blanc); outline: none; box-shadow: 0 0 0 3px var(--robine-clair); }
+  .qz__sous-legende { font-weight: 650; margin: 1.3rem 0 0.6rem; }
+  .qz__consentement { display: flex; gap: 0.7rem; align-items: flex-start; margin-top: 1.3rem; font-size: 0.92rem; color: var(--gris); }
+  .qz__consentement input { margin-top: 0.25rem; width: 1.1rem; height: 1.1rem; flex: none; accent-color: var(--robine); }
+
+  .qz__nav { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1.5rem; }
+  .qz__nav .bouton { margin-left: auto; }
+  .qz__retour { background: none; border: 0; font: inherit; font-weight: 600; color: var(--gris); cursor: pointer; padding: 0.6rem 0; }
+  .qz__retour:hover { color: var(--encre); text-decoration: underline; }
+  /* Choix unique : le passage est automatique, le bouton ne sert qu'au clavier et sans JS */
+  .qz--actif .qz__etape:has(input[type='radio'][required]) .qz__suivant { opacity: 0.85; }
+  .qz__piege { position: absolute; left: -9999px; }
+</style>
+<style>
+  .qz:not(.qz--actif) .qz__nav button[type='button'] { display: none; }
+</style>

@@ -5,6 +5,7 @@ const liens = [
   { href: '/particuliers/', label: 'Particuliers' },
   { href: '/patrimoine/', label: 'Patrimoine' },
   { href: '/entreprises/', label: 'Entreprises' },
+  { href: '/passion/', label: 'Passion' },
   { href: '/conseils/', label: 'Conseils' },
   { href: '/agence/', label: "L'agence" },
   { href: '/contact/', label: 'Contact' },
@@ -54,7 +55,7 @@ const actif = (href: string) => chemin.startsWith(href);
   .marque__sous { font-size: 0.82rem; color: var(--encre); margin-top: 0.1rem; }
   .esperluette { color: var(--rouge); font-weight: 700; }
 
-  .nav { display: none; align-items: center; gap: 1.35rem; font-weight: 550; font-size: 0.98rem; }
+  .nav { display: none; align-items: center; gap: 1.2rem; font-weight: 550; font-size: 0.98rem; }
   .nav a { color: var(--encre); text-decoration: none; padding-block: 0.4rem; border-bottom: 2px solid transparent; }
   .nav a:hover { border-bottom-color: var(--pierre); }
   .nav a[aria-current='page'] { border-bottom-color: var(--robine); color: var(--robine-fonce); }
@@ -81,7 +82,7 @@ const actif = (href: string) => chemin.startsWith(href);
   .menu__panneau a:not(.bouton):hover, .menu__panneau a[aria-current='page'] { background: var(--robine-clair); }
   .menu__panneau .bouton { margin-top: 0.6rem; }
 
-  @media (min-width: 68rem) {
+  @media (min-width: 74rem) {
     .nav { display: flex; }
     .menu { display: none; }
   }
