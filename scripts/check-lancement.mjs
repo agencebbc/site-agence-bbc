@@ -15,7 +15,9 @@ parcourir('src');
 let reste = 0;
 for (const f of fichiers) {
   readFileSync(f, 'utf8').split('\n').forEach((ligne, i) => {
-    if (ligne.includes('[à compléter]') && !ligne.includes("export const A_COMPLETER")) {
+    const marque = ligne.includes('A_COMPLETER') || ligne.includes('[à compléter]');
+    const technique = /export const A_COMPLETER|import |includes\(A_COMPLETER\)|replace\(A_COMPLETER/.test(ligne);
+    if (marque && !technique && !f.endsWith('check-lancement.mjs')) {
       console.log(`${f}:${i + 1}  ${ligne.trim()}`);
       reste++;
     }
