@@ -14,7 +14,7 @@ const actif = (href: string) => chemin.startsWith(href);
 <header class="entete">
   <div class="conteneur entete__barre">
     <a class="marque" href="/" aria-label={`${AGENCE.nom}, accueil`}>
-      <img class="marque__logo" src="/img/logo-blason.png" alt="" width="52" height="40" />
+      <img class="marque__logo" src="/img/logo-blason.png" alt="" width="285" height="279" />
       <span class="marque__textes">
         <span class="marque__nom">Agence BBC</span>
         <span class="marque__sous">Assurance <span class="esperluette">&amp;</span> Banque</span>
@@ -49,7 +49,7 @@ const actif = (href: string) => chemin.startsWith(href);
   .entete__barre { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.4rem; }
   .marque { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--encre); }
   .marque__textes { display: flex; flex-direction: column; line-height: 1.1; }
-  .marque__logo { height: 2.6rem; width: auto; }
+  .marque__logo { height: 2.9rem; width: auto; flex: none; }
   .marque__nom { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; letter-spacing: -0.01em; color: var(--robine); }
   .marque__sous { font-size: 0.82rem; color: var(--encre); margin-top: 0.1rem; }
   .esperluette { color: var(--rouge); font-weight: 700; }
