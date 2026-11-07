@@ -1,7 +1,7 @@
 # Site de l'Agence BBC — Assurance & Banque (Narbonne)
 
 Site vitrine et rubrique Conseils de l'agence d'assurance de Sébastien Baurain, Chloé Bouyssou et Cédric Couralet,
-agents généraux AXA, 7 boulevard Marcel Sembat, 11100 Narbonne.
+agents généraux d'assurance, 7 boulevard Marcel Sembat, 11100 Narbonne.
 Objectif : être trouvé et cité par Google et les moteurs de réponse IA sur les questions d'assurance,
 d'épargne et de retraite des habitants, indépendants et entreprises du Narbonnais, puis convertir en rendez-vous.
 
@@ -40,7 +40,8 @@ Procédure hebdomadaire :
 ## Interdits (conformité DDA et image de l'agence)
 
 - Pas de promesse : « meilleur », « garanti », « gratuit », « sans risque », rendement futur.
-- Pas de tarif, de nom de produit AXA ou de comparatif nominatif sans validation écrite de Cédric.
+- Aucune mention d'AXA (nom, produits, logo) tant que la compagnie n'a pas validé le site.
+- Pas de tarif, de nom de produit ou de comparatif nominatif sans validation écrite de Cédric.
 - Aucune donnée de client, même anonymisée de façon reconnaissable.
 - Pas de chiffre sans source vérifiée le jour de la rédaction.
 - L'article informe ; il ne conseille pas une personne. Le conseil se fait en rendez-vous.

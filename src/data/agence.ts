@@ -14,7 +14,7 @@ export const AGENCE = {
   nomFicheGoogle: 'AXA Assurance et Banque Baurain Couralet',
   signature: 'Prévoir, protéger, transmettre',
   description:
-    "Agence d'assurance et de banque à Narbonne : assurances des particuliers, des professionnels et des entreprises, épargne, retraite et prévoyance. Agents généraux AXA et activité de courtage.",
+    "Agence d'assurance et de banque à Narbonne : assurances des particuliers, des professionnels et des entreprises, épargne, retraite et prévoyance. Agents généraux d'assurance et activité de courtage.",
   adresse: {
     rue: '7 boulevard Marcel Sembat',
     codePostal: '11100',
@@ -45,7 +45,7 @@ export const AGENCE = {
   effectif: 9,
   zone: ['Narbonne', 'Grand Narbonne', 'Aude', 'Occitanie'],
   reglementaire: {
-    statut: "Agents généraux d'assurance, mandataires exclusifs d'AXA France, et intermédiaires en assurance exerçant une activité de courtage",
+    statut: "Agents généraux d'assurance et intermédiaires en assurance exerçant une activité de courtage",
     orias: ['21 006 184', '24 003 571'],
     structure: "SPEC Baurain & Couralet (société en participation d'exercice conjoint)",
     siren: A_COMPLETER,

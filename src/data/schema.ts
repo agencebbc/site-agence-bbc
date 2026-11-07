@@ -13,7 +13,7 @@ export function schemaAgence(site: URL) {
     '@type': 'InsuranceAgency',
     '@id': idAgence(site),
     name: a.nom,
-    alternateName: [a.nomCourt, a.nomFicheGoogle],
+    alternateName: [a.nomCourt],
     slogan: a.signature,
     logo: new URL('/img/logo-agence-bbc.png', site).href,
     image: new URL('/img/logo-agence-bbc.png', site).href,

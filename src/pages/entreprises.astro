@@ -31,7 +31,7 @@ const secteurs: { titre: string; photo: CleePhoto; texte: string }[] = [
 const etapes = [
   { titre: 'Visite', texte: 'Nous venons dans votre entreprise pour comprendre votre activité et vos contraintes.' },
   { titre: 'Cartographie des risques', texte: 'Ce qui peut arrêter votre activité, ce qui est déjà couvert, ce qui ne l’est pas.' },
-  { titre: 'Propositions', texte: 'Des garanties chez AXA ou, via notre activité de courtage, auprès d’autres assureurs pour les risques spécifiques.' },
+  { titre: 'Propositions', texte: 'Des garanties adaptées, en consultant si besoin plusieurs assureurs grâce à notre activité de courtage.' },
   { titre: 'Suivi et sinistres', texte: 'Un interlocuteur dédié, un point annuel, et notre présence quand un sinistre survient.' },
 ];
 
@@ -55,7 +55,7 @@ const jsonLd = [schemaFilAriane(Astro.site!, [{ nom: 'Accueil', chemin: '/' }, {
     <div class="conteneur">
       <hr class="filet" />
       <h2>Ce que nous assurons</h2>
-      <p class="chapo">Agents généraux AXA, nous exerçons aussi une activité de courtage : pour un risque particulier, nous pouvons consulter d’autres assureurs.</p>
+      <p class="chapo">Agents généraux d’assurance, nous exerçons aussi une activité de courtage : pour un risque particulier, nous pouvons consulter plusieurs assureurs.</p>
       <ul class="garanties">
         {garanties.map((g) => <li><h3>{g.titre}</h3><p>{g.texte}</p></li>)}
       </ul>
