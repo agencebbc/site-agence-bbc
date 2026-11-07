@@ -1,6 +1,6 @@
 # Site de l'Agence BBC — Assurance & Banque (Narbonne)
 
-Site vitrine et rubrique Conseils de l'agence d'assurance de Cédric Couralet et Sébastien Baurain,
+Site vitrine et rubrique Conseils de l'agence d'assurance de Sébastien Baurain, Chloé Bouyssou et Cédric Couralet,
 agents généraux AXA, 7 boulevard Marcel Sembat, 11100 Narbonne.
 Objectif : être trouvé et cité par Google et les moteurs de réponse IA sur les questions d'assurance,
 d'épargne et de retraite des habitants, indépendants et entreprises du Narbonnais, puis convertir en rendez-vous.
@@ -17,7 +17,7 @@ d'épargne et de retraite des habitants, indépendants et entreprises du Narbonn
 
 Un article = un fichier `src/content/conseils/<adresse-de-la-page>.md`. Le schéma (`src/content.config.ts`) impose :
 `titre` (≤ 110 car.), `description` (80–165 car.), `categorie` (particuliers, professionnels, epargne-retraite, entreprises),
-`auteur` (cedric-couralet, sebastien-baurain), `publie`, `misAJour` (si mise à jour), `essentiel` (3 à 6 points), `faq`, `sources`.
+`auteur` (cedric-couralet, sebastien-baurain, chloe-bouyssou), `publie`, `misAJour` (si mise à jour), `essentiel` (3 à 6 points), `faq`, `sources`.
 
 Procédure hebdomadaire :
 1. Prendre le prochain sujet du calendrier éditorial.

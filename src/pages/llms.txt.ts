@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { AGENCE, CATEGORIES } from '../data/agence';
+import { AGENCE, CATEGORIES, NOMS_AGENTS } from '../data/agence';
 
 // Résumé lisible par les assistants IA (convention llms.txt).
 export const GET: APIRoute = async ({ site }) => {
@@ -12,7 +12,7 @@ export const GET: APIRoute = async ({ site }) => {
     `> ${a.description}`,
     '',
     `Adresse : ${a.adresse.rue}, ${a.adresse.codePostal} ${a.adresse.ville} (${a.adresse.departement}). Téléphone : ${a.telephone}. Horaires : ${a.horaires.texte}.`,
-    `Agents généraux : Cédric Couralet et Sébastien Baurain. ORIAS n° ${a.reglementaire.orias.join(' et ')}.`,
+    `Agents généraux : ${NOMS_AGENTS}. ORIAS n° ${a.reglementaire.orias.join(' et ')}.`,
     '',
     '## Pages principales',
     `- [L'agence et l'équipe](${new URL('/agence/', site)}) : présentation, statut, coordonnées`,

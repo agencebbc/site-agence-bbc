@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Rdv from '../components/Rdv.astro';
 import Bandeau from '../components/Bandeau.astro';
 import Image from '../components/Image.astro';
-import { AGENCE, AUTEURS } from '../data/agence';
+import { AGENCE, AUTEURS, NOMS_AGENTS } from '../data/agence';
 import { schemaFilAriane, schemaPersonne } from '../data/schema';
 
 const a = AGENCE;
@@ -20,13 +20,13 @@ const poles = [
 ---
 <Base
   titre="L'agence et l'équipe"
-  description="L'agence BBC, agents généraux AXA à Narbonne : Cédric Couralet, Sébastien Baurain et une équipe de neuf collaborateurs, boulevard Marcel Sembat."
+  description="L'agence BBC, agents généraux AXA à Narbonne : Sébastien Baurain, Chloé Bouyssou, Cédric Couralet et neuf collaborateurs, boulevard Marcel Sembat."
   jsonLd={jsonLd}
 >
   <Bandeau
     photo="vignoble"
     titre="L'agence et l'équipe"
-    chapo={`Installée ${a.adresse.rue} à ${a.adresse.ville}, l'agence réunit deux agents généraux et ${a.effectif} collaborateurs. Notre métier : comprendre votre situation, vous expliquer vos options, puis vous accompagner dans la durée.`}
+    chapo={`Installée ${a.adresse.rue} à ${a.adresse.ville}, l'agence réunit trois agents généraux, ${NOMS_AGENTS}, et ${a.effectif} collaborateurs. Notre métier : comprendre votre situation, vous expliquer vos options, puis vous accompagner dans la durée.`}
     ariane={[{ nom: 'Accueil', href: '/' }, { nom: "L'agence" }]}
   />
   <div class="conteneur page">
@@ -75,7 +75,7 @@ const poles = [
   .page { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
   .page > :not(.split) { max-width: var(--mesure); }
   .photo-equipe { margin-block: 3rem; }
-  .personnes { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .personnes { grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
   .personne { background: var(--blanc); border-radius: var(--rayon-photo); padding: 1.4rem; border-top: 4px solid var(--or) !important; }
   .personnes { display: grid; gap: 1.2rem; }
   .personne h3 { margin: 0; }

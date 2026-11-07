@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import A from '../components/A.astro';
-import { AGENCE, A_COMPLETER } from '../data/agence';
+import { AGENCE, A_COMPLETER, NOMS_AGENTS } from '../data/agence';
 const a = AGENCE;
 const r = a.reglementaire;
 ---
@@ -12,7 +12,7 @@ const r = a.reglementaire;
     <h2>Éditeur du site</h2>
     <p>
       {a.nom}, enseigne de la {r.structure}.<br />
-      Agents généraux : Cédric Couralet et Sébastien Baurain.<br />
+      Agents généraux : {NOMS_AGENTS}.<br />
       {a.adresse.rue}, {a.adresse.codePostal} {a.adresse.ville}.<br />
       Téléphone : {a.telephone}. E-mail : <A v={a.email} />.<br />
       SIREN : <A v={r.siren} />.

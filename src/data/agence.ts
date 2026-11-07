@@ -76,19 +76,30 @@ export type Auteur = {
 };
 
 export const AUTEURS: Record<string, Auteur> = {
-  'cedric-couralet': {
-    id: 'cedric-couralet',
-    nom: 'Cédric Couralet',
-    fonction: "Agent général d'assurances",
-    bio: "Co-agent général de l'agence à Narbonne, il accompagne particuliers, indépendants et chefs d'entreprise sur leurs assurances, leur prévoyance, leur épargne et leur retraite.",
-  },
   'sebastien-baurain': {
     id: 'sebastien-baurain',
     nom: 'Sébastien Baurain',
     fonction: "Agent général d'assurances",
-    bio: "Co-agent général de l'agence à Narbonne.",
+    bio: "Agent général de l'agence à Narbonne.",
+  },
+  'chloe-bouyssou': {
+    id: 'chloe-bouyssou',
+    nom: 'Chloé Bouyssou',
+    fonction: "Agent général d'assurances",
+    bio: "Agent général de l'agence à Narbonne.",
+  },
+  'cedric-couralet': {
+    id: 'cedric-couralet',
+    nom: 'Cédric Couralet',
+    fonction: "Agent général d'assurances",
+    bio: "Agent général de l'agence à Narbonne, il accompagne particuliers, indépendants et chefs d'entreprise sur leurs assurances, leur prévoyance, leur épargne et leur retraite.",
   },
 };
+
+// « Sébastien Baurain, Chloé Bouyssou et Cédric Couralet »
+const noms = Object.values(AUTEURS).map((p) => p.nom);
+export const NOMS_AGENTS = `${noms.slice(0, -1).join(', ')} et ${noms[noms.length - 1]}`;
+export const NB_AGENTS = noms.length;
 
 export const CATEGORIES = {
   particuliers: {

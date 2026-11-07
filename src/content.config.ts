@@ -10,7 +10,7 @@ const conseils = defineCollection({
     titre: z.string().max(110),
     description: z.string().min(80).max(165),
     categorie: z.enum(['particuliers', 'professionnels', 'epargne-retraite', 'entreprises']),
-    auteur: z.enum(['cedric-couralet', 'sebastien-baurain']),
+    auteur: z.enum(['cedric-couralet', 'sebastien-baurain', 'chloe-bouyssou']),
     publie: z.coerce.date(),
     misAJour: z.coerce.date().optional(),
     // Réponse directe en 3 à 6 points : c'est ce que reprennent en priorité Google et les moteurs IA.

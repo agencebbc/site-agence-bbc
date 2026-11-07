@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 import Image from '../components/Image.astro';
 import Fleche from '../components/Fleche.astro';
 import CarteArticle from '../components/CarteArticle.astro';
-import { AGENCE } from '../data/agence';
+import { AGENCE, NOMS_AGENTS } from '../data/agence';
 import type { CleePhoto } from '../data/photos';
 
 const articles = (await getCollection('conseils', ({ data }) => !data.brouillon))
@@ -57,7 +57,7 @@ const etapes = [
 ---
 <Base
   titre="Gestion de patrimoine et assurance entreprise à Narbonne | Agence BBC"
-  description="Agence BBC à Narbonne : gestion de patrimoine, épargne, retraite et assurance des entreprises. Deux agents généraux et neuf collaborateurs à votre écoute."
+  description="Agence BBC à Narbonne : gestion de patrimoine, épargne, retraite et assurance des entreprises. Trois agents généraux et neuf collaborateurs à votre écoute."
 >
   <section class="hero">
     <div class="hero__photo"><Image photo="fontfroide" ratio={16 / 9} prioritaire /></div>
@@ -65,7 +65,7 @@ const etapes = [
       <p class="hero__signature">{a.signature}</p>
       <h1>Gestion de patrimoine et assurance des entreprises à Narbonne</h1>
       <p class="hero__chapo">
-        Cédric Couralet et Sébastien Baurain, agents généraux, et leurs {a.effectif} collaborateurs accompagnent les
+        {NOMS_AGENTS}, agents généraux, et leurs {a.effectif} collaborateurs accompagnent les
         familles, les chefs d’entreprise et les indépendants du Narbonnais : protéger ce que vous avez construit, le faire
         fructifier, le transmettre.
       </p>
