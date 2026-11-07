@@ -1,0 +1,100 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Bandeau from '../components/Bandeau.astro';
+import Image from '../components/Image.astro';
+import Rdv from '../components/Rdv.astro';
+import CarteArticle from '../components/CarteArticle.astro';
+import { schemaFilAriane } from '../data/schema';
+
+const articles = (await getCollection('conseils', ({ data }) => !data.brouillon && data.categorie === 'particuliers')).slice(0, 3);
+
+const garanties = [
+  { titre: 'Auto et deux-roues', texte: 'Du tiers à la formule tous risques, avec assistance et véhicule de remplacement selon vos besoins.' },
+  { titre: 'Habitation', texte: 'Propriétaire, locataire, résidence secondaire ou logement mis en location : votre logement et vos biens.' },
+  { titre: 'Santé', texte: 'Une complémentaire adaptée à votre famille, à vos besoins d’optique, de dentaire ou d’hospitalisation.' },
+  { titre: 'Prévoyance et accidents de la vie', texte: 'Protéger vos revenus et vos proches en cas d’accident, d’arrêt de travail ou de décès.' },
+  { titre: 'Assurance de prêt', texte: 'L’assurance de votre crédit immobilier, à la souscription ou en changement en cours de prêt.' },
+  { titre: 'Banque et épargne', texte: 'Compte, épargne et financement de vos projets, suivis par la même équipe que vos assurances.' },
+];
+
+const faq = [
+  { q: 'Puis-je regrouper tous mes contrats à l’agence ?', r: 'Oui. Regrouper auto, habitation, santé et épargne chez un même interlocuteur donne une vue d’ensemble sur vos garanties et évite les doublons comme les trous de couverture.' },
+  { q: 'Mon logement est en zone inondable : suis-je couvert ?', r: 'Les dommages causés par une inondation reconnue catastrophe naturelle par arrêté sont couverts par votre assurance habitation, avec une franchise légale. Dans l’Aude, nous vérifions avec vous les garanties et les mesures de prévention adaptées à votre logement.' },
+  { q: 'Je loue ma maison en saisonnier : quelle assurance ?', r: 'La location saisonnière demande des garanties spécifiques, côté propriétaire comme côté occupant. Signalez-la à l’agence pour adapter votre contrat.' },
+];
+
+const site = Astro.site!;
+const jsonLd = [
+  schemaFilAriane(site, [{ nom: 'Accueil', chemin: '/' }, { nom: 'Particuliers', chemin: '/particuliers/' }]),
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })) },
+];
+---
+<Base
+  titre="Assurance des particuliers à Narbonne"
+  description="Auto, habitation, santé, prévoyance, assurance de prêt et banque : l'agence BBC à Narbonne assure votre famille et votre logement, avec un interlocuteur unique."
+  jsonLd={jsonLd}
+>
+  <Bandeau
+    photo="cles"
+    titre="Assurance des particuliers à Narbonne"
+    chapo="Votre voiture, votre logement, votre santé, votre famille : toutes vos assurances du quotidien, suivies par une équipe que vous connaissez."
+    ariane={[{ nom: 'Accueil', href: '/' }, { nom: 'Particuliers' }]}
+  >
+    <div class="actions"><a class="bouton bouton--blanc" href="/contact/?sujet=particuliers">Faire le point sur mes contrats</a></div>
+  </Bandeau>
+
+  <section class="section">
+    <div class="conteneur">
+      <hr class="filet" />
+      <h2>Ce que nous assurons</h2>
+      <ul class="garanties">
+        {garanties.map((g) => <li><h3>{g.titre}</h3><p>{g.texte}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--blanc">
+    <div class="conteneur split">
+      <div class="split__photo"><Image photo="littoral" ratio={4 / 3} sizes="(min-width: 56rem) 36rem, 100vw" /></div>
+      <div>
+        <h2>Assurés en connaissance de cause</h2>
+        <p class="chapo">
+          Risque inondation dans l’Aude, résidence secondaire sur le littoral, location saisonnière, jeune conducteur :
+          nous partons de votre situation réelle, pas d’un formulaire.
+        </p>
+        <p>Et le jour d’un sinistre, vous appelez l’agence : nous vous accompagnons dans les démarches.</p>
+        <a class="lien-fleche" href="/contact/?sujet=particuliers">Demander un devis ou un bilan</a>
+      </div>
+    </div>
+  </section>
+
+  {articles.length > 0 && (
+    <section class="section">
+      <div class="conteneur">
+        <h2>Nos conseils</h2>
+        <ul class="cartes">{articles.map((art) => <CarteArticle article={art} />)}</ul>
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="conteneur" style="max-width:56rem">
+      <h2>Questions fréquentes</h2>
+      {faq.map((f) => <details class="faq"><summary>{f.q}</summary><p>{f.r}</p></details>)}
+      <Rdv sujet="particuliers" titre="Faire le point sur vos contrats" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .garanties { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1.1rem; }
+  @media (min-width: 44rem) { .garanties { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 66rem) { .garanties { grid-template-columns: repeat(3, 1fr); } }
+  .garanties li { background: var(--blanc); border-radius: var(--rayon-photo); padding: 1.5rem; border-top: 4px solid var(--rouge); box-shadow: 0 1px 0 var(--pierre); }
+  .garanties h3 { font-size: 1.22rem; }
+  .garanties p { margin: 0; color: var(--gris); }
+  .faq { border-bottom: 1px solid var(--pierre); padding: 1rem 0; }
+  .faq summary { font-family: var(--serif); font-weight: 600; font-size: 1.15rem; cursor: pointer; }
+  .faq p { margin: 0.7rem 0 0; color: var(--gris); }
+</style>

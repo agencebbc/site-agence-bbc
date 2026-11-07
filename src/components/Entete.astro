@@ -2,6 +2,7 @@
 import { AGENCE } from '../data/agence';
 const chemin = Astro.url.pathname;
 const liens = [
+  { href: '/particuliers/', label: 'Particuliers' },
   { href: '/patrimoine/', label: 'Patrimoine' },
   { href: '/entreprises/', label: 'Entreprises' },
   { href: '/conseils/', label: 'Conseils' },
@@ -53,7 +54,7 @@ const actif = (href: string) => chemin.startsWith(href);
   .marque__sous { font-size: 0.82rem; color: var(--encre); margin-top: 0.1rem; }
   .esperluette { color: var(--rouge); font-weight: 700; }
 
-  .nav { display: none; align-items: center; gap: 1.7rem; font-weight: 550; font-size: 0.98rem; }
+  .nav { display: none; align-items: center; gap: 1.35rem; font-weight: 550; font-size: 0.98rem; }
   .nav a { color: var(--encre); text-decoration: none; padding-block: 0.4rem; border-bottom: 2px solid transparent; }
   .nav a:hover { border-bottom-color: var(--pierre); }
   .nav a[aria-current='page'] { border-bottom-color: var(--robine); color: var(--robine-fonce); }
@@ -80,7 +81,7 @@ const actif = (href: string) => chemin.startsWith(href);
   .menu__panneau a:not(.bouton):hover, .menu__panneau a[aria-current='page'] { background: var(--robine-clair); }
   .menu__panneau .bouton { margin-top: 0.6rem; }
 
-  @media (min-width: 62rem) {
+  @media (min-width: 68rem) {
     .nav { display: flex; }
     .menu { display: none; }
   }

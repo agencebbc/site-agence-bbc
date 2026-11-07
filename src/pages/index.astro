@@ -14,6 +14,13 @@ const a = AGENCE;
 
 const expertises = [
   {
+    titre: 'Particuliers',
+    photo: 'cles' as CleePhoto,
+    lien: '/particuliers/',
+    texte: 'Toutes les assurances de votre famille, suivies par une même équipe, avec une vue d’ensemble sur vos garanties.',
+    points: ['Auto et deux-roues', 'Habitation, résidence secondaire, location', 'Complémentaire santé', 'Prévoyance et accidents de la vie', 'Assurance de prêt et banque'],
+  },
+  {
     titre: 'Gestion de patrimoine',
     photo: 'mas' as CleePhoto,
     lien: '/patrimoine/',
@@ -45,7 +52,7 @@ const themes = [
   { titre: 'Transmettre', lien: '/patrimoine/', teinte: '#efe9df', icone: ic('<path d="M20 12v8H4v-8"/><path d="M2 7h20v5H2z"/><path d="M12 20V7"/><path d="M12 7c-2-3-6-3-6 0h6zm0 0c2-3 6-3 6 0h-6z"/>') },
   { titre: 'Assurer mon entreprise', lien: '/entreprises/', teinte: '#e3f2ec', icone: ic('<path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/>') },
   { titre: 'Protéger mes salariés', lien: '/entreprises/', teinte: '#e7ebf7', icone: ic('<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M15 15c2.8-.6 6 1.2 6 5"/>') },
-  { titre: 'Assurer ma famille', lien: '/contact/?sujet=particuliers', teinte: '#fde4e4', icone: ic('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M12 16.5s-3-1.8-3-3.6a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 1.8-3 3.6-3 3.6z"/>') },
+  { titre: 'Assurer ma famille', lien: '/particuliers/', teinte: '#fde4e4', icone: ic('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M12 16.5s-3-1.8-3-3.6a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 1.8-3 3.6-3 3.6z"/>') },
 ];
 
 const etapes = [
@@ -56,14 +63,14 @@ const etapes = [
 ];
 ---
 <Base
-  titre="Gestion de patrimoine et assurance entreprise à Narbonne | Agence BBC"
-  description="Agence BBC à Narbonne : gestion de patrimoine, épargne, retraite et assurance des entreprises. Trois agents généraux et neuf collaborateurs à votre écoute."
+  titre="Agence d'assurance à Narbonne : particuliers, patrimoine, entreprises | Agence BBC"
+  description="Agence BBC à Narbonne : assurance des particuliers, gestion de patrimoine et assurance des entreprises. Trois agents généraux et neuf collaborateurs à votre écoute."
 >
   <section class="hero">
     <div class="hero__photo"><Image photo="fontfroide" ratio={16 / 9} prioritaire /></div>
     <div class="conteneur hero__texte">
       <p class="hero__signature">{a.signature}</p>
-      <h1>Gestion de patrimoine et assurance des entreprises à Narbonne</h1>
+      <h1>Votre agence d’assurance à Narbonne <span class="hero__domaines">Particuliers, patrimoine, entreprises</span></h1>
       <p class="hero__chapo">
         {NOMS_AGENTS}, agents généraux, et leurs {a.effectif} collaborateurs accompagnent les
         familles, les chefs d’entreprise et les indépendants du Narbonnais : protéger ce que vous avez construit, le faire
@@ -93,15 +100,14 @@ const etapes = [
   <section class="section">
     <div class="conteneur">
       <hr class="filet" />
-      <h2 class="titre-expertises">Deux expertises, un même interlocuteur</h2>
+      <h2 class="titre-expertises">Trois expertises, un même interlocuteur</h2>
       <p class="chapo">
-        Votre patrimoine et votre entreprise sont liés : un chef d’entreprise protège son activité, sa famille et sa
-        retraite avec la même personne en face de lui. C’est notre façon de travailler.
+        Votre famille, votre patrimoine et votre entreprise sont liés. Avec un seul interlocuteur, rien n’est assuré deux fois et rien n’est oublié : c’est notre façon de travailler.
       </p>
       <div class="expertises">
         {expertises.map((e) => (
           <article class="expertise">
-            <Image photo={e.photo} ratio={16 / 10} sizes="(min-width: 56rem) 36rem, 100vw" />
+            <Image photo={e.photo} ratio={16 / 10} sizes="(min-width: 52rem) 24rem, 100vw" />
             <div class="expertise__corps">
               <h3><a href={e.lien}>{e.titre}</a></h3>
               <p>{e.texte}</p>
@@ -140,20 +146,6 @@ const etapes = [
             <li><h3>{e.titre}</h3><p>{e.texte}</p></li>
           ))}
         </ol>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="conteneur split split--inverse">
-      <div class="split__photo"><Image photo="cles" ratio={4 / 3} sizes="(min-width: 56rem) 36rem, 100vw" /></div>
-      <div>
-        <h2>Et pour toute la famille</h2>
-        <p class="chapo">
-          Auto, habitation, santé, assurance de prêt : vos assurances du quotidien, gérées par la même équipe que votre
-          épargne, avec une vue d’ensemble sur vos contrats.
-        </p>
-        <a class="lien-fleche" href="/contact/?sujet=particuliers">Faire le point sur mes contrats <Fleche /></a>
       </div>
     </div>
   </section>
@@ -211,13 +203,14 @@ const etapes = [
     background: linear-gradient(180deg, rgba(23, 36, 86, 0.15) 0%, rgba(23, 36, 86, 0.55) 45%, rgba(23, 36, 86, 0.92) 100%);
   }
   .hero__texte { position: relative; z-index: 1; padding-block: 6rem clamp(5rem, 9vw, 7rem); }
-  .hero h1 { color: var(--blanc); max-width: 17ch; font-size: clamp(2.3rem, 1.4rem + 4vw, 4.4rem); }
+  .hero__domaines { display: block; font-size: 0.5em; font-weight: 500; color: var(--salin); margin-top: 0.5em; letter-spacing: 0; }
+  .hero h1 { color: var(--blanc); max-width: 20ch; font-size: clamp(2.3rem, 1.4rem + 4vw, 4.4rem); }
   .hero__signature { font-family: var(--serif); font-style: italic; color: var(--salin); font-size: 1.15rem; margin-bottom: 0.8rem; }
   .hero__chapo { max-width: 56ch; font-size: clamp(1.05rem, 1rem + 0.35vw, 1.22rem); color: #e4e9f5; margin-bottom: 1.8rem; }
   @keyframes zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
 
   .expertises { display: grid; gap: 1.8rem; margin-top: 2.5rem; }
-  @media (min-width: 56rem) { .expertises { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 52rem) { .expertises { grid-template-columns: repeat(3, 1fr); } }
   .expertise {
     position: relative; background: var(--blanc); border-radius: var(--rayon-photo); overflow: hidden;
     box-shadow: var(--ombre); display: flex; flex-direction: column;
