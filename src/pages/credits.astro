@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { PHOTOS } from '../data/photos';
+---
+<Base titre="Crédits photos" description="Crédits des photographies utilisées sur le site de l'agence BBC à Narbonne, publiées sous licence Unsplash.">
+  <div class="conteneur page prose">
+    <h1>Crédits photos</h1>
+    <p>Les photographies de ce site sont publiées sous la <a href="https://unsplash.com/license" rel="noopener">licence Unsplash</a>. Merci à leurs auteurs.</p>
+    <ul>
+      {Object.values(PHOTOS).map((p) => <li>{p.alt} : <a href={p.page} rel="noopener">{p.auteur}</a></li>)}
+    </ul>
+  </div>
+</Base>
+<style>
+  .page { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+</style>

@@ -94,18 +94,22 @@ export const CATEGORIES = {
   particuliers: {
     titre: 'Particuliers',
     accroche: 'Auto, habitation, santé, assurance emprunteur',
+    photo: 'cles',
   },
   professionnels: {
     titre: 'Professionnels et indépendants',
     accroche: 'Artisans, commerçants, professions libérales : protection, prévoyance, retraite',
+    photo: 'atelier',
   },
   'epargne-retraite': {
-    titre: 'Épargne et retraite',
+    titre: 'Patrimoine, épargne et retraite',
     accroche: 'Assurance vie, PER, transmission',
+    photo: 'couple',
   },
   entreprises: {
     titre: 'Entreprises',
     accroche: 'Flotte, dommages, responsabilité civile, santé et prévoyance collectives',
+    photo: 'chantier',
   },
 } as const;
 

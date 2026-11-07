@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Image from './Image.astro';
+import { CATEGORIES } from '../data/agence';
+import { PHOTOS, type CleePhoto } from '../data/photos';
+import { typo } from '../data/typo';
+interface Props { article: CollectionEntry<'conseils'> }
+const { article } = Astro.props;
+const d = article.data;
+const cat = CATEGORIES[d.categorie];
+const photo = (d.photo && d.photo in PHOTOS ? d.photo : cat.photo) as CleePhoto;
+const fmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
+---
+<li class="carte">
+  <Image photo={photo} ratio={3 / 2} sizes="(min-width: 66rem) 24rem, (min-width: 44rem) 50vw, 100vw" />
+  <div class="carte__corps">
+    <span class="carte__cat">{cat.titre}</span>
+    <h3><a href={`/conseils/${article.id}/`}>{typo(d.titre)}</a></h3>
+    <p>{typo(d.description)}</p>
+    <p class="carte__date">Mis à jour le {fmt.format(d.misAJour ?? d.publie)}</p>
+  </div>
+</li>

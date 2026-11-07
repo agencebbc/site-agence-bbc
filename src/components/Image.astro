@@ -1,0 +1,27 @@
+---
+import { PHOTOS, urlPhoto, type CleePhoto } from '../data/photos';
+interface Props {
+  photo: CleePhoto;
+  ratio?: number; // largeur / hauteur
+  sizes?: string;
+  prioritaire?: boolean;
+  class?: string;
+  alt?: string;
+}
+const { photo, ratio = 3 / 2, sizes = '100vw', prioritaire = false, class: classe, alt } = Astro.props;
+const p = PHOTOS[photo];
+const largeurs = [480, 800, 1200, 1800, 2400];
+const srcset = largeurs.map((w) => `${urlPhoto(p.id, w, Math.round(w / ratio))} ${w}w`).join(', ');
+---
+<img
+  class={classe}
+  src={urlPhoto(p.id, 1200, Math.round(1200 / ratio))}
+  srcset={srcset}
+  sizes={sizes}
+  width="1200"
+  height={Math.round(1200 / ratio)}
+  alt={alt ?? p.alt}
+  loading={prioritaire ? 'eager' : 'lazy'}
+  fetchpriority={prioritaire ? 'high' : undefined}
+  decoding="async"
+/>

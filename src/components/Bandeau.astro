@@ -1,0 +1,21 @@
+---
+import Image from './Image.astro';
+import type { CleePhoto } from '../data/photos';
+interface Props { photo: CleePhoto; titre: string; chapo?: string; ariane?: { nom: string; href?: string }[] }
+const { photo, titre, chapo, ariane = [] } = Astro.props;
+---
+<section class="bandeau">
+  <div class="bandeau__photo"><Image photo={photo} ratio={16 / 7} prioritaire /></div>
+  <div class="conteneur bandeau__texte">
+    {ariane.length > 0 && (
+      <nav class="ariane" aria-label="Fil d'Ariane">
+        {ariane.map((e, i) => (
+          <>{e.href ? <a href={e.href}>{e.nom}</a> : <span>{e.nom}</span>}{i < ariane.length - 1 && <span aria-hidden="true"> / </span>}</>
+        ))}
+      </nav>
+    )}
+    <h1>{titre}</h1>
+    {chapo && <p class="chapo">{chapo}</p>}
+    <slot />
+  </div>
+</section>

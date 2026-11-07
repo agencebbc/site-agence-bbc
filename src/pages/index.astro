@@ -1,201 +1,292 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import Rdv from '../components/Rdv.astro';
-import { AGENCE, CATEGORIES } from '../data/agence';
-import { typo } from '../data/typo';
+import Image from '../components/Image.astro';
+import Fleche from '../components/Fleche.astro';
+import CarteArticle from '../components/CarteArticle.astro';
+import { AGENCE } from '../data/agence';
+import type { CleePhoto } from '../data/photos';
 
-const articles = (await getCollection('conseils', ({ data }) => !data.brouillon)).sort(
-  (a, b) => (b.data.misAJour ?? b.data.publie).getTime() - (a.data.misAJour ?? a.data.publie).getTime(),
-);
-const derniers = articles.slice(0, 4);
-const fmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
-
-const verbes = [
-  { mot: 'Prévoir', texte: 'Épargner, préparer sa retraite, faire face à un arrêt de travail.' },
-  { mot: 'Protéger', texte: 'Assurer sa famille, son logement, son activité et ses salariés.' },
-  { mot: 'Transmettre', texte: 'Organiser son patrimoine et la suite pour ses proches.' },
-];
+const articles = (await getCollection('conseils', ({ data }) => !data.brouillon))
+  .sort((a, b) => (b.data.misAJour ?? b.data.publie).getTime() - (a.data.misAJour ?? a.data.publie).getTime())
+  .slice(0, 3);
 const a = AGENCE;
+
+const expertises = [
+  {
+    titre: 'Gestion de patrimoine',
+    photo: 'mas' as CleePhoto,
+    lien: '/patrimoine/',
+    texte: 'Épargne, retraite, transmission : une stratégie construite à partir de vos objectifs et de votre fiscalité, revue avec vous chaque année.',
+    points: ['Bilan patrimonial et fiscal', 'Assurance vie et contrat de capitalisation', 'Plan d’épargne retraite (PER)', 'Prévoyance de la famille et du dirigeant', 'Préparation de la transmission'],
+  },
+  {
+    titre: 'Assurance des entreprises',
+    photo: 'chantier' as CleePhoto,
+    lien: '/entreprises/',
+    texte: 'Des garanties dimensionnées pour votre activité, de l’artisan seul à la PME, avec un interlocuteur qui connaît votre métier et votre territoire.',
+    points: ['Multirisque professionnelle et pertes d’exploitation', 'Responsabilité civile et décennale', 'Flotte automobile et marchandises transportées', 'Santé et prévoyance collectives', 'Protection du dirigeant et homme clé'],
+  },
+];
+
+const secteurs: { titre: string; photo: CleePhoto }[] = [
+  { titre: 'Viticulture et négoce', photo: 'chai' },
+  { titre: 'Artisans et bâtiment', photo: 'atelier' },
+  { titre: 'Commerce et restauration', photo: 'commerce' },
+  { titre: 'Transport et logistique', photo: 'camion' },
+  { titre: 'Professions libérales', photo: 'carnet' },
+];
+
+
+const ic = (d: string) => `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const themes = [
+  { titre: 'Épargner', lien: '/patrimoine/', teinte: '#e7ebf7', icone: ic('<path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/>') },
+  { titre: 'Préparer sa retraite', lien: '/patrimoine/', teinte: '#fde4e4', icone: ic('<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>') },
+  { titre: 'Transmettre', lien: '/patrimoine/', teinte: '#efe9df', icone: ic('<path d="M20 12v8H4v-8"/><path d="M2 7h20v5H2z"/><path d="M12 20V7"/><path d="M12 7c-2-3-6-3-6 0h6zm0 0c2-3 6-3 6 0h-6z"/>') },
+  { titre: 'Assurer mon entreprise', lien: '/entreprises/', teinte: '#e3f2ec', icone: ic('<path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/>') },
+  { titre: 'Protéger mes salariés', lien: '/entreprises/', teinte: '#e7ebf7', icone: ic('<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M15 15c2.8-.6 6 1.2 6 5"/>') },
+  { titre: 'Assurer ma famille', lien: '/contact/?sujet=particuliers', teinte: '#fde4e4', icone: ic('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M12 16.5s-3-1.8-3-3.6a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 1.8-3 3.6-3 3.6z"/>') },
+];
+
+const etapes = [
+  { titre: 'Écouter', texte: 'Un premier rendez-vous, à l’agence ou chez vous, pour comprendre votre situation et vos projets.' },
+  { titre: 'Analyser', texte: 'Un bilan de vos contrats, de votre patrimoine ou des risques de votre entreprise.' },
+  { titre: 'Proposer', texte: 'Des solutions chiffrées et expliquées, chez AXA ou, pour certains risques d’entreprise, auprès d’autres assureurs.' },
+  { titre: 'Suivre', texte: 'Un point chaque année et un interlocuteur dédié, y compris le jour où vous avez besoin de votre assurance.' },
+];
 ---
 <Base
-  titre="Agence d'assurance et de banque à Narbonne | Agence BBC"
-  description="Agence d'assurance et de banque à Narbonne : particuliers, indépendants, entreprises, épargne et retraite. Conseils clairs et rendez-vous avec nos agents généraux."
+  titre="Gestion de patrimoine et assurance entreprise à Narbonne | Agence BBC"
+  description="Agence BBC à Narbonne : gestion de patrimoine, épargne, retraite et assurance des entreprises. Deux agents généraux et neuf collaborateurs à votre écoute."
 >
-  <section class="hero conteneur">
-    <h1 class="hero__titre">Votre agence d'assurance et de banque à Narbonne</h1>
-    <p class="hero__chapo">
-      Cédric Couralet et Sébastien Baurain, agents généraux, et leurs {a.effectif} collaborateurs conseillent
-      les particuliers, les indépendants et les entreprises du Narbonnais. Sur ce site, des réponses claires à vos
-      questions ; à l'agence, quelqu'un pour vous aider à décider.
-    </p>
-    <ul class="verbes" aria-label={a.signature}>
-      {verbes.map((v, i) => (
-        <li class="verbe" style={`--i:${i}`}>
-          <span class="verbe__mot">{v.mot}</span>
-          <span class="verbe__texte">{v.texte}</span>
-        </li>
-      ))}
-    </ul>
-    <div class="hero__actions">
-      <a class="bouton" href="/contact/">Demander un rendez-vous</a>
-      <a class="bouton bouton--clair" href={`tel:${a.telephoneIntl}`}>Appeler le {a.telephone}</a>
+  <section class="hero">
+    <div class="hero__photo"><Image photo="fontfroide" ratio={16 / 9} prioritaire /></div>
+    <div class="conteneur hero__texte">
+      <p class="hero__signature">{a.signature}</p>
+      <h1>Gestion de patrimoine et assurance des entreprises à Narbonne</h1>
+      <p class="hero__chapo">
+        Cédric Couralet et Sébastien Baurain, agents généraux, et leurs {a.effectif} collaborateurs accompagnent les
+        familles, les chefs d’entreprise et les indépendants du Narbonnais : protéger ce que vous avez construit, le faire
+        fructifier, le transmettre.
+      </p>
+      <div class="actions">
+        <a class="bouton bouton--blanc" href="/contact/">Prendre rendez-vous</a>
+        <a class="bouton bouton--contour-blanc" href={`tel:${a.telephoneIntl}`}>Appeler le {a.telephone}</a>
+      </div>
     </div>
   </section>
 
-  <section class="conteneur bloc" aria-labelledby="conseils-titre">
-    <div class="bloc__tete">
-      <h2 id="conseils-titre">Nos dernières réponses</h2>
-      <a href="/conseils/">Tous les conseils</a>
-    </div>
-    <ul class="articles">
-      {derniers.map((art) => (
-        <li class="article-ligne">
-          <p class="article-ligne__cat">{CATEGORIES[art.data.categorie].titre}</p>
-          <h3><a href={`/conseils/${art.id}/`}>{typo(art.data.titre)}</a></h3>
-          <p>{typo(art.data.description)}</p>
-          <p class="article-ligne__date">Mis à jour le {fmt.format(art.data.misAJour ?? art.data.publie)}</p>
+
+  <section class="themes conteneur" aria-label="Vos besoins">
+    <ul>
+      {themes.map((t) => (
+        <li style={`--teinte:${t.teinte}`}>
+          <a href={t.lien}>
+            <span class="themes__icone" set:html={t.icone} />
+            <span>{t.titre}</span>
+          </a>
         </li>
       ))}
     </ul>
   </section>
 
-  <section class="conteneur bloc" aria-labelledby="univers-titre">
-    <h2 id="univers-titre">Ce que nous assurons</h2>
-    <div class="univers">
-      {Object.entries(CATEGORIES).map(([id, c]) => (
-        <div class="univers__item">
-          <h3>{c.titre}</h3>
-          <p>{c.accroche}.</p>
-          <a href={`/contact/?sujet=${id}`}>En parler à l'agence</a>
+  <section class="section">
+    <div class="conteneur">
+      <hr class="filet" />
+      <h2 class="titre-expertises">Deux expertises, un même interlocuteur</h2>
+      <p class="chapo">
+        Votre patrimoine et votre entreprise sont liés : un chef d’entreprise protège son activité, sa famille et sa
+        retraite avec la même personne en face de lui. C’est notre façon de travailler.
+      </p>
+      <div class="expertises">
+        {expertises.map((e) => (
+          <article class="expertise">
+            <Image photo={e.photo} ratio={16 / 10} sizes="(min-width: 56rem) 36rem, 100vw" />
+            <div class="expertise__corps">
+              <h3><a href={e.lien}>{e.titre}</a></h3>
+              <p>{e.texte}</p>
+              <ul>{e.points.map((p) => <li>{p}</li>)}</ul>
+              <span class="lien-fleche">Découvrir <Fleche /></span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sable">
+    <div class="conteneur">
+      <h2>Nous connaissons vos métiers</h2>
+      <p class="chapo">Les entreprises du Narbonnais ont leurs risques propres. Nous les assurons au quotidien.</p>
+      <ul class="secteurs">
+        {secteurs.map((s) => (
+          <li class="secteur">
+            <Image photo={s.photo} ratio={4 / 5} sizes="(min-width: 62rem) 15rem, 50vw" />
+            <span>{s.titre}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="secteurs__lien"><a class="lien-fleche" href="/entreprises/">Assurance des entreprises <Fleche /></a></p>
+    </div>
+  </section>
+
+  <section class="section section--blanc">
+    <div class="conteneur split">
+      <div class="split__photo"><Image photo="rendezVous" ratio={4 / 3} sizes="(min-width: 56rem) 36rem, 100vw" /></div>
+      <div>
+        <h2>Notre méthode</h2>
+        <ol class="etapes">
+          {etapes.map((e) => (
+            <li><h3>{e.titre}</h3><p>{e.texte}</p></li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur split split--inverse">
+      <div class="split__photo"><Image photo="cles" ratio={4 / 3} sizes="(min-width: 56rem) 36rem, 100vw" /></div>
+      <div>
+        <h2>Et pour toute la famille</h2>
+        <p class="chapo">
+          Auto, habitation, santé, assurance de prêt : vos assurances du quotidien, gérées par la même équipe que votre
+          épargne, avec une vue d’ensemble sur vos contrats.
+        </p>
+        <a class="lien-fleche" href="/contact/?sujet=particuliers">Faire le point sur mes contrats <Fleche /></a>
+      </div>
+    </div>
+  </section>
+
+  {articles.length > 0 && (
+    <section class="section section--blanc">
+      <div class="conteneur">
+        <div class="tete-bloc">
+          <h2>Nos derniers conseils</h2>
+          <a class="lien-fleche" href="/conseils/">Tous les conseils <Fleche /></a>
         </div>
-      ))}
+        <ul class="cartes">{articles.map((art) => <CarteArticle article={art} />)}</ul>
+      </div>
+    </section>
+  )}
+
+  <section class="section section--bleu">
+    <div class="conteneur split">
+      <div class="split__photo"><Image photo="littoral" ratio={4 / 3} sizes="(min-width: 56rem) 36rem, 100vw" /></div>
+      <div>
+        <h2>Une agence de proximité, au cœur de Narbonne</h2>
+        <p class="chapo">Nous recevons sur rendez-vous ou sans, boulevard Marcel Sembat, à deux pas du centre-ville.</p>
+        <dl class="infos">
+          <dt>Adresse</dt><dd>{a.adresse.rue}, {a.adresse.codePostal} {a.adresse.ville}</dd>
+          <dt>Horaires</dt><dd>{a.horaires.texte}</dd>
+          <dt>Téléphone</dt><dd><a href={`tel:${a.telephoneIntl}`}>{a.telephone}</a></dd>
+        </dl>
+        <div class="actions">
+          <a class="bouton" href={a.google.itineraire} rel="noopener">Itinéraire</a>
+          <a class="bouton bouton--clair" href={a.google.avis} rel="noopener">Lire nos avis Google</a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="conteneur bloc" aria-labelledby="agence-titre">
-    <h2 id="agence-titre">L'agence, au cœur de Narbonne</h2>
-    <div class="infos">
-      <div>
-        <p class="infos__label">Adresse</p>
-        <p>{a.adresse.rue}<br />{a.adresse.codePostal} {a.adresse.ville}</p>
-        <a href={a.google.itineraire} rel="noopener">Itinéraire</a>
-      </div>
-      <div>
-        <p class="infos__label">Horaires</p>
-        <p>{a.horaires.texte}</p>
-      </div>
-      <div>
-        <p class="infos__label">Téléphone</p>
-        <p><a href={`tel:${a.telephoneIntl}`}>{a.telephone}</a></p>
-        <a href={a.google.avis} rel="noopener">Lire nos avis Google</a>
+  <section class="appel">
+    <div class="appel__photo"><Image photo="vignoble" ratio={21 / 9} /></div>
+    <div class="conteneur appel__texte">
+      <h2>Parlons de vos projets</h2>
+      <p>Un premier rendez-vous pour faire le point, à l’agence ou par téléphone.</p>
+      <div class="actions">
+        <a class="bouton bouton--blanc" href="/contact/">Prendre rendez-vous</a>
+        <a class="bouton bouton--contour-blanc" href={`tel:${a.telephoneIntl}`}>{a.telephone}</a>
       </div>
     </div>
-    <p class="infos__statut">
-      Agents généraux AXA, nous exerçons aussi une activité de courtage pour certains besoins des entreprises.{' '}
-      <a href="/agence/">Découvrir l'agence et l'équipe</a>
-    </p>
   </section>
-
-  <div class="conteneur">
-    <Rdv titre="Une question sur votre situation ?" />
-  </div>
 </Base>
 
 <style>
-  .hero { padding-block: clamp(2.5rem, 6vw, 5rem) 1rem; }
-  .hero__titre {
-    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem);
-    max-width: 24ch;
-    margin-bottom: 0.8rem;
+  .hero { position: relative; min-height: clamp(34rem, 86vh, 52rem); display: flex; align-items: flex-end; color: var(--blanc); background: var(--encre); overflow: hidden; }
+  .hero__photo { position: absolute; inset: 0; }
+  .hero__photo :global(img) { width: 100%; height: 100%; object-fit: cover; animation: zoom 14s ease-out both; }
+  .hero::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(23, 36, 86, 0.15) 0%, rgba(23, 36, 86, 0.55) 45%, rgba(23, 36, 86, 0.92) 100%);
   }
-  .hero__chapo { max-width: 58ch; font-size: 1.1rem; color: var(--encre); }
+  .hero__texte { position: relative; z-index: 1; padding-block: 6rem clamp(5rem, 9vw, 7rem); }
+  .hero h1 { color: var(--blanc); max-width: 17ch; font-size: clamp(2.3rem, 1.4rem + 4vw, 4.4rem); }
+  .hero__signature { font-family: var(--serif); font-style: italic; color: var(--salin); font-size: 1.15rem; margin-bottom: 0.8rem; }
+  .hero__chapo { max-width: 56ch; font-size: clamp(1.05rem, 1rem + 0.35vw, 1.22rem); color: #e4e9f5; margin-bottom: 1.8rem; }
+  @keyframes zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
 
-  .verbes {
-    list-style: none;
-    padding: 0;
-    margin: 2.2rem 0 2.4rem;
-    border-top: 1px solid var(--pierre);
+  .expertises { display: grid; gap: 1.8rem; margin-top: 2.5rem; }
+  @media (min-width: 56rem) { .expertises { grid-template-columns: 1fr 1fr; } }
+  .expertise {
+    position: relative; background: var(--blanc); border-radius: var(--rayon-photo); overflow: hidden;
+    box-shadow: var(--ombre); display: flex; flex-direction: column;
   }
-  .verbe {
-    display: grid;
-    gap: 0.2rem 2rem;
-    padding: 0.9rem 0 1rem;
-    border-bottom: 1px solid var(--pierre);
-    animation: monte 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-    animation-delay: calc(var(--i) * 140ms + 100ms);
+  .expertise :global(img) { aspect-ratio: 16 / 10; object-fit: cover; width: 100%; transition: transform 500ms ease; }
+  .expertise:hover :global(img) { transform: scale(1.03); }
+  .expertise__corps { padding: 1.6rem 1.6rem 1.8rem; }
+  .expertise h3 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); }
+  .expertise h3 a { color: var(--encre); text-decoration: none; }
+  .expertise h3 a::after { content: ''; position: absolute; inset: 0; }
+  .expertise p { color: var(--gris); }
+  .expertise ul { list-style: none; padding: 0; margin: 0 0 1.3rem; display: grid; gap: 0.5rem; }
+  .expertise li { padding-left: 1.6rem; position: relative; }
+  .expertise li::before {
+    content: ''; position: absolute; left: 0; top: 0.45em; width: 0.9rem; height: 0.55rem;
+    border-left: 2px solid var(--robine); border-bottom: 2px solid var(--robine); transform: rotate(-45deg);
   }
-  .verbe__mot {
-    font-family: var(--titre);
-    font-weight: 800;
-    font-size: clamp(2.8rem, 1.6rem + 6vw, 6.4rem);
-    line-height: 0.95;
-    letter-spacing: -0.035em;
-    color: var(--encre);
-  }
-  .verbe:nth-child(2) .verbe__mot { color: var(--robine); }
-  .verbe__texte {
-    font-size: 1.05rem;
-    color: var(--gris);
-    max-width: 34ch;
-    align-self: end;
-  }
-  @media (min-width: 52rem) {
-    .verbe { grid-template-columns: minmax(0, 1fr) 20rem; align-items: end; }
-    .verbe__texte { padding-bottom: 0.5rem; }
-  }
-  @keyframes monte {
-    from { opacity: 0; transform: translateY(0.4em); }
-    to { opacity: 1; transform: none; }
-  }
-  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+  .expertise .lien-fleche { color: var(--robine); }
 
-  .bloc { margin-top: clamp(3.5rem, 8vw, 6rem); }
-  .bloc h2 { margin-top: 0; }
-  .bloc__tete {
-    max-width: var(--mesure);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.5rem;
+  .secteurs { list-style: none; padding: 0; margin: 2.2rem 0 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.9rem; }
+  @media (min-width: 62rem) { .secteurs { grid-template-columns: repeat(5, 1fr); gap: 1.1rem; } }
+  .secteur { position: relative; border-radius: var(--rayon-photo); overflow: hidden; }
+  .secteur:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  @media (min-width: 62rem) { .secteur:last-child:nth-child(odd) { grid-column: auto; } }
+  .secteur :global(img) { aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
+  .secteur:last-child:nth-child(odd) :global(img) { aspect-ratio: 16 / 9; }
+  @media (min-width: 62rem) { .secteur:last-child:nth-child(odd) :global(img) { aspect-ratio: 4 / 5; } }
+  .secteur::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(23, 36, 86, 0.85)); }
+  .secteur span {
+    position: absolute; left: 1rem; right: 1rem; bottom: 0.9rem; z-index: 1;
+    color: var(--blanc); font-family: var(--serif); font-weight: 600; font-size: 1.1rem; line-height: 1.2;
   }
-  .bloc__tete a { font-family: var(--titre); font-weight: 600; }
+  .secteurs__lien { margin-top: 1.6rem; }
 
-  .articles { list-style: none; padding: 0; margin: 0; }
-  .article-ligne {
-    padding: 1.3rem 0;
-    border-top: 1px solid var(--pierre);
-    max-width: var(--mesure);
+  .etapes { list-style: none; counter-reset: etape; padding: 0; margin: 1.6rem 0 0; display: grid; gap: 1.3rem; }
+  .etapes li { counter-increment: etape; display: grid; grid-template-columns: 2.8rem 1fr; column-gap: 1rem; }
+  .etapes li::before {
+    content: counter(etape); grid-row: span 2; width: 2.8rem; height: 2.8rem; border-radius: 50%;
+    display: grid; place-items: center; background: var(--robine-clair); color: var(--robine-fonce);
+    font-family: var(--serif); font-weight: 650; font-size: 1.2rem;
   }
-  .article-ligne h3 { margin: 0.2rem 0 0.5rem; font-size: 1.3rem; }
-  .article-ligne h3 a { color: var(--encre); text-decoration: none; }
-  .article-ligne h3 a:hover { color: var(--robine); text-decoration: underline; }
-  .article-ligne p { margin-bottom: 0.4rem; }
-  .article-ligne__cat, .article-ligne__date {
-    font-family: var(--titre);
-    font-size: 0.88rem;
-    color: var(--gris);
-  }
-  .article-ligne__cat { color: var(--robine-fonce); font-weight: 600; }
+  .etapes h3 { margin: 0.35rem 0 0.2rem; font-size: 1.2rem; }
+  .etapes p { margin: 0; color: var(--gris); }
 
-  .univers { display: grid; gap: 0 2.5rem; }
-  .univers__item { border-top: 3px solid var(--encre); padding: 1rem 0 1.6rem; }
-  .univers__item h3 { margin: 0 0 0.4rem; font-size: 1.2rem; }
-  .univers__item p { margin-bottom: 0.6rem; }
-  .univers__item a { font-family: var(--titre); font-weight: 600; }
-  @media (min-width: 44rem) { .univers { grid-template-columns: 1fr 1fr; } }
+  .tete-bloc { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-bottom: 1.8rem; }
+  .tete-bloc h2 { margin: 0; }
 
-  .infos { display: grid; gap: 1.2rem 2.5rem; }
-  .infos p { margin-bottom: 0.3rem; }
-  .infos a { font-family: var(--titre); font-weight: 600; }
-  .infos__label {
-    font-family: var(--titre);
-    font-weight: 700;
-    color: var(--gris);
-    font-size: 0.92rem;
+  .infos { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1.2rem; margin: 0 0 1.8rem; }
+  .infos dt { font-weight: 650; color: var(--encre); }
+  .infos dd { margin: 0; }
+
+  .appel { position: relative; color: var(--blanc); background: var(--encre); overflow: hidden; text-align: center; }
+  .appel__photo { position: absolute; inset: 0; }
+  .appel__photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .appel::after { content: ''; position: absolute; inset: 0; background: rgba(23, 36, 86, 0.72); }
+  .appel__texte { position: relative; z-index: 1; padding-block: clamp(4rem, 10vw, 7rem); display: flex; flex-direction: column; align-items: center; }
+  .appel h2 { color: var(--blanc); font-size: clamp(2rem, 1.4rem + 2.6vw, 3.4rem); }
+  .appel p { color: #e4e9f5; font-size: 1.15rem; margin-bottom: 1.6rem; }
+  .appel .actions { justify-content: center; }
+  .themes { position: relative; z-index: 2; margin-top: -3.2rem; }
+  .themes ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+  @media (min-width: 48rem) { .themes ul { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 70rem) { .themes ul { grid-template-columns: repeat(6, 1fr); } }
+  .themes a {
+    display: flex; flex-direction: column; gap: 0.7rem; height: 100%;
+    background: var(--blanc); border-radius: var(--rayon-photo); padding: 1.1rem 1rem 1.2rem;
+    text-decoration: none; color: var(--encre); font-weight: 650; line-height: 1.25;
+    box-shadow: 0 12px 30px -18px rgba(23, 36, 86, 0.45); transition: transform 150ms, box-shadow 150ms;
   }
-  .infos__statut { margin-top: 1.8rem; max-width: var(--mesure); }
-  @media (min-width: 52rem) { .infos { grid-template-columns: repeat(3, 1fr); } }
+  .themes a:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -18px rgba(23, 36, 86, 0.55); color: var(--robine-fonce); }
+  .themes__icone { width: 3rem; height: 3rem; border-radius: 50%; background: var(--teinte); color: var(--robine); display: grid; place-items: center; }
 </style>

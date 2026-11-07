@@ -15,6 +15,8 @@ export function schemaAgence(site: URL) {
     name: a.nom,
     alternateName: [a.nomCourt, a.nomFicheGoogle],
     slogan: a.signature,
+    logo: new URL('/img/logo-agence-bbc.png', site).href,
+    image: new URL('/img/logo-agence-bbc.png', site).href,
     description: a.description,
     url: new URL('/', site).href,
     telephone: a.telephoneIntl,

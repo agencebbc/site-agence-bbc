@@ -1,0 +1,148 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Bandeau from '../components/Bandeau.astro';
+import Image from '../components/Image.astro';
+import Rdv from '../components/Rdv.astro';
+import CarteArticle from '../components/CarteArticle.astro';
+import { schemaFilAriane } from '../data/schema';
+
+const articles = (await getCollection('conseils', ({ data }) => !data.brouillon && ['epargne-retraite', 'professionnels'].includes(data.categorie))).slice(0, 3);
+
+const publics = [
+  { titre: 'Chefs d’entreprise et indépendants', texte: 'Relier patrimoine privé et professionnel, préparer la retraite et la cession.' },
+  { titre: 'Professions libérales', texte: 'Compenser une protection sociale plus faible et organiser l’épargne de long terme.' },
+  { titre: 'Familles', texte: 'Faire fructifier l’épargne, protéger le conjoint, aider les enfants.' },
+  { titre: 'Futurs et jeunes retraités', texte: 'Compléter ses revenus et préparer la transmission dans de bonnes conditions.' },
+];
+
+const solutions = [
+  { titre: 'Assurance vie', texte: 'L’enveloppe de référence pour épargner, avec une fiscalité allégée après huit ans et un cadre favorable à la transmission.' },
+  { titre: 'Contrat de capitalisation', texte: 'Proche de l’assurance vie, il peut être souscrit par une société ou donné de son vivant.' },
+  { titre: 'Plan d’épargne retraite', texte: 'Des versements déductibles du revenu imposable, dans la limite de plafonds, pour préparer la retraite.' },
+  { titre: 'Prévoyance', texte: 'Arrêt de travail, invalidité, décès : garantir les revenus et protéger ceux qui comptent sur vous.' },
+  { titre: 'Transmission', texte: 'Clauses bénéficiaires, donations, démembrement : anticiper, en lien avec votre notaire.' },
+  { titre: 'Diversification', texte: 'Supports financiers et immobiliers au sein des contrats, selon votre horizon et votre tolérance au risque.' },
+];
+
+const faq = [
+  { q: 'Faut-il un patrimoine important pour faire un bilan ?', r: 'Non. Un bilan est utile dès qu’il y a des décisions à prendre : un achat immobilier, une naissance, la création ou la vente d’une entreprise, l’approche de la retraite.' },
+  { q: 'Travaillez-vous avec mon notaire et mon expert-comptable ?', r: 'Oui, si vous le souhaitez. Les décisions patrimoniales d’un chef d’entreprise touchent à la fois sa société, sa fiscalité et sa famille : il est plus efficace de les prendre ensemble.' },
+  { q: 'Mon épargne est-elle garantie ?', r: 'Les fonds en euros d’une assurance vie offrent une garantie en capital. Les supports en unités de compte, eux, présentent un risque de perte en capital : nous vous expliquons la part de chacun avant toute décision.' },
+];
+
+const site = Astro.site!;
+const jsonLd = [
+  schemaFilAriane(site, [{ nom: 'Accueil', chemin: '/' }, { nom: 'Gestion de patrimoine', chemin: '/patrimoine/' }]),
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })) },
+];
+---
+<Base
+  titre="Gestion de patrimoine à Narbonne"
+  description="Bilan patrimonial, assurance vie, PER, prévoyance et transmission : l'agence BBC à Narbonne construit avec vous une stratégie patrimoniale suivie dans la durée."
+  jsonLd={jsonLd}
+>
+  <Bandeau
+    photo="couple"
+    titre="Gestion de patrimoine à Narbonne"
+    chapo="Épargner, préparer sa retraite, protéger ses proches et transmettre : une stratégie construite à partir de vos objectifs, et revue avec vous chaque année."
+    ariane={[{ nom: 'Accueil', href: '/' }, { nom: 'Gestion de patrimoine' }]}
+  >
+    <div class="actions"><a class="bouton bouton--blanc" href="/contact/?sujet=epargne-retraite">Demander un bilan patrimonial</a></div>
+  </Bandeau>
+
+  <section class="section">
+    <div class="conteneur">
+      <hr class="filet" />
+      <h2>Pour qui ?</h2>
+      <ul class="publics">
+        {publics.map((p) => <li><h3>{p.titre}</h3><p>{p.texte}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--blanc">
+    <div class="conteneur split">
+      <div class="split__photo"><Image photo="carnet" ratio={4 / 3} sizes="(min-width: 56rem) 36rem, 100vw" /></div>
+      <div>
+        <h2>Tout commence par un bilan patrimonial</h2>
+        <p class="chapo">Avant de proposer un placement, nous prenons le temps de regarder l’ensemble de votre situation.</p>
+        <ul class="coches">
+          <li>Votre patrimoine : immobilier, épargne, biens professionnels</li>
+          <li>Vos revenus, votre fiscalité et votre protection sociale</li>
+          <li>La protection de votre conjoint et de vos enfants</li>
+          <li>Vos projets et votre horizon : retraite, achat, transmission</li>
+        </ul>
+        <p>Vous repartez avec des recommandations écrites, chiffrées et expliquées.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sable">
+    <div class="conteneur">
+      <h2>Nos solutions</h2>
+      <p class="chapo">Des outils éprouvés, choisis et combinés selon votre situation.</p>
+      <ul class="solutions">
+        {solutions.map((s) => <li><h3>{s.titre}</h3><p>{s.texte}</p></li>)}
+      </ul>
+      <p class="avert">Les supports en unités de compte présentent un risque de perte en capital. Leurs performances passées ne préjugent pas des performances futures.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur split split--inverse">
+      <div class="split__photo"><Image photo="mas" ratio={4 / 3} sizes="(min-width: 56rem) 36rem, 100vw" /></div>
+      <div>
+        <h2>Chef d’entreprise : une seule vision, privée et professionnelle</h2>
+        <p class="chapo">
+          Votre entreprise est souvent votre premier actif. Nous l’intégrons dans votre stratégie : prévoyance du dirigeant,
+          épargne retraite déductible, protection de l’associé, préparation de la cession ou de la transmission.
+        </p>
+        <a class="lien-fleche" href="/entreprises/">Notre expertise entreprises</a>
+      </div>
+    </div>
+  </section>
+
+  {articles.length > 0 && (
+    <section class="section section--blanc">
+      <div class="conteneur">
+        <h2>Pour aller plus loin</h2>
+        <ul class="cartes">{articles.map((art) => <CarteArticle article={art} />)}</ul>
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="conteneur lisible-large">
+      <h2>Questions fréquentes</h2>
+      {faq.map((f) => <details class="faq"><summary>{f.q}</summary><p>{f.r}</p></details>)}
+      <Rdv sujet="epargne-retraite" titre="Demander un bilan patrimonial" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .publics { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1.2rem; }
+  @media (min-width: 48rem) { .publics { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 70rem) { .publics { grid-template-columns: repeat(4, 1fr); } }
+  .publics li { border-top: 3px solid var(--encre); padding-top: 1rem; }
+  .publics h3 { font-size: 1.2rem; }
+  .publics p { color: var(--gris); margin: 0; }
+  .coches { list-style: none; padding: 0; margin: 0 0 1.3rem; display: grid; gap: 0.7rem; }
+  .coches li { padding-left: 1.7rem; position: relative; }
+  .coches li::before {
+    content: ''; position: absolute; left: 0; top: 0.45em; width: 0.9rem; height: 0.55rem;
+    border-left: 2px solid var(--robine); border-bottom: 2px solid var(--robine); transform: rotate(-45deg);
+  }
+  .solutions { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1.1rem; }
+  @media (min-width: 44rem) { .solutions { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 66rem) { .solutions { grid-template-columns: repeat(3, 1fr); } }
+  .solutions li { background: var(--blanc); border-radius: var(--rayon-photo); padding: 1.5rem; border-top: 4px solid var(--or); }
+  .solutions h3 { font-size: 1.25rem; }
+  .solutions p { margin: 0; color: var(--gris); }
+  .avert { font-size: 0.88rem; color: var(--gris); margin-top: 1.5rem; }
+  .lisible-large { max-width: 56rem; }
+  .faq { border-bottom: 1px solid var(--pierre); padding: 1rem 0; }
+  .faq summary { font-family: var(--serif); font-weight: 600; font-size: 1.15rem; cursor: pointer; }
+  .faq p { margin: 0.7rem 0 0; color: var(--gris); }
+</style>

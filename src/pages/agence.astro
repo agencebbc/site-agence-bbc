@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import Rdv from '../components/Rdv.astro';
+import Bandeau from '../components/Bandeau.astro';
+import Image from '../components/Image.astro';
 import { AGENCE, AUTEURS } from '../data/agence';
 import { schemaFilAriane, schemaPersonne } from '../data/schema';
 
@@ -21,13 +23,13 @@ const poles = [
   description="L'agence BBC, agents généraux AXA à Narbonne : Cédric Couralet, Sébastien Baurain et une équipe de neuf collaborateurs, boulevard Marcel Sembat."
   jsonLd={jsonLd}
 >
+  <Bandeau
+    photo="vignoble"
+    titre="L'agence et l'équipe"
+    chapo={`Installée ${a.adresse.rue} à ${a.adresse.ville}, l'agence réunit deux agents généraux et ${a.effectif} collaborateurs. Notre métier : comprendre votre situation, vous expliquer vos options, puis vous accompagner dans la durée.`}
+    ariane={[{ nom: 'Accueil', href: '/' }, { nom: "L'agence" }]}
+  />
   <div class="conteneur page">
-    <h1>L'agence et l'équipe</h1>
-    <p class="chapo">
-      Installée {a.adresse.rue} à {a.adresse.ville}, l'agence réunit deux agents généraux et {a.effectif} collaborateurs.
-      Notre métier : comprendre votre situation, vous expliquer vos options, puis vous accompagner dans la durée,
-      jusqu'au jour où vous avez besoin de votre assurance.
-    </p>
 
     <h2>Les agents généraux</h2>
     <div class="personnes">
@@ -40,10 +42,15 @@ const poles = [
       ))}
     </div>
 
+    <div class="split photo-equipe">
+      <div class="split__photo"><Image photo="rendezVous" ratio={4 / 3} sizes="(min-width: 56rem) 36rem, 100vw" /></div>
+      <div>
     <h2>L'équipe, organisée en trois pôles</h2>
     <ul class="poles">
       {poles.map((p) => <li><strong>{p.titre}.</strong> {p.texte}</li>)}
     </ul>
+      </div>
+    </div>
 
     <h2>Notre statut</h2>
     <p>
@@ -65,14 +72,15 @@ const poles = [
 </Base>
 
 <style>
-  .page { padding-top: clamp(2rem, 5vw, 3.5rem); }
-  .page > * { max-width: var(--mesure); }
-  .chapo { font-size: 1.1rem; }
+  .page { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+  .page > :not(.split) { max-width: var(--mesure); }
+  .photo-equipe { margin-block: 3rem; }
+  .personnes { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .personne { background: var(--blanc); border-radius: var(--rayon-photo); padding: 1.4rem; border-top: 4px solid var(--or) !important; }
   .personnes { display: grid; gap: 1.2rem; }
-  .personne { border-top: 3px solid var(--encre); padding-top: 0.8rem; }
   .personne h3 { margin: 0; }
-  .personne__fonction { font-family: var(--titre); color: var(--gris); margin-bottom: 0.4rem; }
+  .personne__fonction { font-family: var(--sans); color: var(--gris); margin-bottom: 0.4rem; }
   .poles { padding-left: 1.2em; }
   .poles li { margin-bottom: 0.6rem; }
-  .poles strong { font-family: var(--titre); }
+  .poles strong { font-family: var(--sans); }
 </style>

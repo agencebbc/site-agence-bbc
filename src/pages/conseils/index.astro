@@ -2,9 +2,10 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Rdv from '../../components/Rdv.astro';
+import Bandeau from '../../components/Bandeau.astro';
+import CarteArticle from '../../components/CarteArticle.astro';
 import { CATEGORIES, type Categorie } from '../../data/agence';
 import { schemaFilAriane } from '../../data/schema';
-import { typo } from '../../data/typo';
 
 const articles = (await getCollection('conseils', ({ data }) => !data.brouillon)).sort(
   (a, b) => (b.data.misAJour ?? b.data.publie).getTime() - (a.data.misAJour ?? a.data.publie).getTime(),
@@ -12,51 +13,32 @@ const articles = (await getCollection('conseils', ({ data }) => !data.brouillon)
 const parCategorie = (Object.keys(CATEGORIES) as Categorie[])
   .map((id) => ({ id, ...CATEGORIES[id], articles: articles.filter((a) => a.data.categorie === id) }))
   .filter((c) => c.articles.length > 0);
-const fmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
 const jsonLd = [schemaFilAriane(Astro.site!, [{ nom: 'Accueil', chemin: '/' }, { nom: 'Conseils', chemin: '/conseils/' }])];
 ---
 <Base
-  titre="Conseils assurance, épargne et retraite"
+  titre="Conseils assurance, patrimoine et retraite"
   description="Les réponses de l'agence BBC à Narbonne sur l'assurance, la prévoyance, l'épargne et la retraite : règles à jour, exemples chiffrés et points de vigilance."
   jsonLd={jsonLd}
 >
+  <Bandeau
+    photo="carnet"
+    titre="Conseils assurance, patrimoine et retraite"
+    chapo="Les questions qu'on nous pose à l'agence, avec des réponses à jour de la réglementation et des exemples chiffrés. Chaque article est rédigé et relu par un agent général."
+    ariane={[{ nom: 'Accueil', href: '/' }, { nom: 'Conseils' }]}
+  />
   <div class="conteneur conseils">
-    <h1>Conseils assurance, épargne et retraite</h1>
-    <p class="chapo">
-      Les questions qu'on nous pose à l'agence, avec des réponses à jour de la réglementation et des exemples
-      chiffrés. Chaque article est rédigé et relu par un agent général de l'agence.
-    </p>
-
     {parCategorie.map((c) => (
       <section id={c.id} class="categorie">
         <h2>{c.titre}</h2>
-        <ul>
-          {c.articles.map((art) => (
-            <li>
-              <h3><a href={`/conseils/${art.id}/`}>{typo(art.data.titre)}</a></h3>
-              <p>{typo(art.data.description)}</p>
-              <p class="date">Mis à jour le {fmt.format(art.data.misAJour ?? art.data.publie)}</p>
-            </li>
-          ))}
-        </ul>
+        <ul class="cartes">{c.articles.map((art) => <CarteArticle article={art} />)}</ul>
       </section>
     ))}
-
-    <Rdv titre="Vous ne trouvez pas votre question ?" />
+    <Rdv titre="Vous ne trouvez pas votre question ?" texte="Posez-la à l'agence : nous vous répondons, et elle deviendra peut-être notre prochain article." />
   </div>
 </Base>
 
 <style>
-  .conseils { padding-top: clamp(2rem, 5vw, 3.5rem); }
-  .conseils > * { max-width: var(--mesure); }
-  .chapo { font-size: 1.1rem; }
-  .categorie { margin-top: 2.5rem; }
-  .categorie h2 { margin-top: 0; font-size: 1.3rem; color: var(--robine-fonce); }
-  .categorie ul { list-style: none; padding: 0; margin: 0; }
-  .categorie li { border-top: 1px solid var(--pierre); padding: 1.1rem 0; }
-  .categorie h3 { margin: 0 0 0.4rem; font-size: 1.25rem; }
-  .categorie h3 a { color: var(--encre); text-decoration: none; }
-  .categorie h3 a:hover { color: var(--robine); text-decoration: underline; }
-  .categorie p { margin-bottom: 0.3rem; }
-  .date { font-family: var(--titre); font-size: 0.88rem; color: var(--gris); }
+  .conseils { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+  .categorie + .categorie { margin-top: 3rem; }
+  .categorie h2 { font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.8rem); }
 </style>

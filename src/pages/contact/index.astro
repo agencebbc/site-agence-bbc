@@ -1,18 +1,24 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { AGENCE, CATEGORIES } from '../../data/agence';
+import Bandeau from '../../components/Bandeau.astro';
+import Image from '../../components/Image.astro';
 const a = AGENCE;
 ---
 <Base
   titre="Contact et rendez-vous"
   description="Contactez l'agence BBC à Narbonne : téléphone, adresse, horaires et formulaire de demande de rendez-vous avec un conseiller."
 >
+  <Bandeau
+    photo="littoral"
+    titre="Contact et rendez-vous"
+    chapo="Laissez votre demande : un conseiller vous rappelle pour fixer un rendez-vous, à l'agence ou par téléphone."
+    ariane={[{ nom: 'Accueil', href: '/' }, { nom: 'Contact' }]}
+  >
+    <div class="actions"><a class="bouton bouton--blanc" href={`tel:${a.telephoneIntl}`}>Appeler le {a.telephone}</a></div>
+  </Bandeau>
   <div class="conteneur page">
-    <h1>Contact et rendez-vous</h1>
-    <p class="chapo">
-      Appelez-nous au <a href={`tel:${a.telephoneIntl}`}>{a.telephone}</a> ou laissez votre demande ci-dessous :
-      un conseiller vous rappelle pour fixer un rendez-vous, à l'agence ou par téléphone.
-    </p>
+    <div class="colonnes">
 
     <form class="formulaire" name="contact" method="POST" action="/contact/merci/" data-netlify="true" netlify-honeypot="site-web">
       <input type="hidden" name="form-name" value="contact" />
@@ -49,12 +55,17 @@ const a = AGENCE;
       </p>
     </form>
 
-    <h2>L'agence</h2>
-    <p>
-      {a.adresse.rue}, {a.adresse.codePostal} {a.adresse.ville}<br />
-      {a.horaires.texte}<br />
-      <a href={a.google.itineraire} rel="noopener">Itinéraire</a>
-    </p>
+    <aside class="agence">
+      <Image photo="fontfroide" ratio={4 / 3} sizes="(min-width: 60rem) 24rem, 100vw" />
+      <div class="agence__corps">
+        <h2>L'agence</h2>
+        <p>{a.adresse.rue}<br />{a.adresse.codePostal} {a.adresse.ville}</p>
+        <p>{a.horaires.texte}</p>
+        <p><a href={`tel:${a.telephoneIntl}`}>{a.telephone}</a></p>
+        <p><a href={a.google.itineraire} rel="noopener">Itinéraire</a> <span aria-hidden="true">/</span> <a href={a.google.avis} rel="noopener">Avis Google</a></p>
+      </div>
+    </aside>
+    </div>
   </div>
 </Base>
 
@@ -67,9 +78,13 @@ const a = AGENCE;
 </script>
 
 <style>
-  .page { padding-top: clamp(2rem, 5vw, 3.5rem); }
-  .page > * { max-width: var(--mesure); }
-  .chapo { font-size: 1.1rem; }
+  .page { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+  .colonnes { display: grid; gap: 2rem; align-items: start; }
+  @media (min-width: 60rem) { .colonnes { grid-template-columns: 1fr 24rem; } }
+  .agence { background: var(--blanc); border-radius: var(--rayon-photo); overflow: hidden; box-shadow: var(--ombre); }
+  .agence :global(img) { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+  .agence__corps { padding: 1.3rem 1.4rem 0.6rem; }
+  .agence h2 { font-size: 1.4rem; }
   .formulaire {
     display: grid;
     gap: 0.35rem;
@@ -77,8 +92,8 @@ const a = AGENCE;
     border: 1px solid var(--pierre);
     border-radius: var(--rayon);
     padding: 1.5rem;
-    margin-top: 1.5rem;
-    font-family: var(--titre);
+    margin-top: 0;
+    font-family: var(--sans);
   }
   .formulaire label { font-weight: 600; margin-top: 0.7rem; }
   .facultatif { font-weight: 400; color: var(--gris); }
@@ -88,7 +103,7 @@ const a = AGENCE;
     font: inherit;
     font-size: 1rem;
     padding: 0.7rem 0.8rem;
-    border: 1px solid #9fb2b3;
+    border: 1px solid #a3abc2;
     border-radius: var(--rayon);
     background: var(--blanc);
     color: var(--encre);

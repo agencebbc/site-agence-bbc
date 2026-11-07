@@ -17,6 +17,8 @@ const conseils = defineCollection({
     essentiel: z.array(z.string()).min(3).max(6),
     faq: z.array(z.object({ q: z.string(), r: z.string() })).default([]),
     sources: z.array(z.object({ titre: z.string(), url: z.string().url().optional() })).default([]),
+    // Clé d'une photo de src/data/photos.ts ; à défaut, la photo de la catégorie.
+    photo: z.string().optional(),
     brouillon: z.boolean().default(false),
   }),
 });

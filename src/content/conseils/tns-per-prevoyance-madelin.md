@@ -4,6 +4,7 @@ description: "Plafonds 2026 du PER et des contrats Madelin santé et prévoyance
 categorie: professionnels
 auteur: cedric-couralet
 publie: 2026-11-07
+photo: atelier
 essentiel:
   - "En 2026, un indépendant imposé au réel peut déduire de son bénéfice jusqu'à 88 911 € de versements sur un PER, avec un minimum garanti de 4 806 €."
   - "Ses cotisations de mutuelle et de prévoyance Madelin forment une enveloppe distincte, plafonnée à 11 534,40 €."

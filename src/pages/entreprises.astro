@@ -1,0 +1,127 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Bandeau from '../components/Bandeau.astro';
+import Image from '../components/Image.astro';
+import Rdv from '../components/Rdv.astro';
+import CarteArticle from '../components/CarteArticle.astro';
+import { schemaFilAriane } from '../data/schema';
+import type { CleePhoto } from '../data/photos';
+
+const articles = (await getCollection('conseils', ({ data }) => !data.brouillon && ['entreprises', 'professionnels'].includes(data.categorie))).slice(0, 3);
+
+const garanties = [
+  { titre: 'Locaux, matériel et pertes d’exploitation', texte: 'Incendie, dégâts des eaux, vol, bris de machine, et la perte de chiffre d’affaires qui suit un sinistre.' },
+  { titre: 'Responsabilité civile', texte: 'Responsabilité d’exploitation et professionnelle : les dommages causés à vos clients et aux tiers.' },
+  { titre: 'Construction et décennale', texte: 'Les assurances obligatoires des métiers du bâtiment, et la dommages-ouvrage pour les maîtres d’ouvrage.' },
+  { titre: 'Flotte et marchandises', texte: 'Véhicules de l’entreprise, du premier utilitaire à la flotte, et marchandises transportées.' },
+  { titre: 'Santé et prévoyance collectives', texte: 'Les garanties de vos salariés, conformes à votre convention collective.' },
+  { titre: 'Protection du dirigeant', texte: 'Prévoyance, homme clé, retraite : la continuité de l’entreprise et la sécurité de votre famille.' },
+];
+
+const secteurs: { titre: string; photo: CleePhoto; texte: string }[] = [
+  { titre: 'Viticulture et négoce', photo: 'chai', texte: 'Chais, matériel, stocks, récoltes, responsabilité, salariés saisonniers : des risques que nous connaissons bien dans les Corbières, le Minervois et La Clape.' },
+  { titre: 'Artisans et bâtiment', photo: 'atelier', texte: 'Décennale, responsabilité civile, outillage, véhicules : une protection à la mesure de vos chantiers.' },
+  { titre: 'Commerce et restauration', photo: 'commerce', texte: 'Local, stock, perte d’exploitation et responsabilité : y compris pour les activités saisonnières du littoral.' },
+  { titre: 'Transport et logistique', photo: 'camion', texte: 'Flotte, marchandises, entrepôts : des garanties pensées pour les flux de l’axe Narbonne – Perpignan – Montpellier.' },
+];
+
+const etapes = [
+  { titre: 'Visite', texte: 'Nous venons dans votre entreprise pour comprendre votre activité et vos contraintes.' },
+  { titre: 'Cartographie des risques', texte: 'Ce qui peut arrêter votre activité, ce qui est déjà couvert, ce qui ne l’est pas.' },
+  { titre: 'Propositions', texte: 'Des garanties chez AXA ou, via notre activité de courtage, auprès d’autres assureurs pour les risques spécifiques.' },
+  { titre: 'Suivi et sinistres', texte: 'Un interlocuteur dédié, un point annuel, et notre présence quand un sinistre survient.' },
+];
+
+const jsonLd = [schemaFilAriane(Astro.site!, [{ nom: 'Accueil', chemin: '/' }, { nom: 'Assurance des entreprises', chemin: '/entreprises/' }])];
+---
+<Base
+  titre="Assurance des entreprises à Narbonne"
+  description="Multirisque, responsabilité civile, décennale, flotte, santé et prévoyance collectives : l'agence BBC assure artisans, commerçants, vignerons et PME du Narbonnais."
+  jsonLd={jsonLd}
+>
+  <Bandeau
+    photo="chantier"
+    titre="Assurance des entreprises à Narbonne"
+    chapo="Artisans, commerçants, vignerons, transporteurs, PME : des garanties dimensionnées pour votre activité, et un interlocuteur qui connaît votre métier."
+    ariane={[{ nom: 'Accueil', href: '/' }, { nom: 'Assurance des entreprises' }]}
+  >
+    <div class="actions"><a class="bouton bouton--blanc" href="/contact/?sujet=entreprises">Faire auditer mes contrats</a></div>
+  </Bandeau>
+
+  <section class="section">
+    <div class="conteneur">
+      <hr class="filet" />
+      <h2>Ce que nous assurons</h2>
+      <p class="chapo">Agents généraux AXA, nous exerçons aussi une activité de courtage : pour un risque particulier, nous pouvons consulter d’autres assureurs.</p>
+      <ul class="garanties">
+        {garanties.map((g) => <li><h3>{g.titre}</h3><p>{g.texte}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--blanc">
+    <div class="conteneur">
+      <h2>Par secteur</h2>
+      <div class="secteurs">
+        {secteurs.map((s, i) => (
+          <article class={`secteur ${i % 2 ? 'secteur--inverse' : ''}`}>
+            <Image photo={s.photo} ratio={3 / 2} sizes="(min-width: 56rem) 32rem, 100vw" />
+            <div>
+              <h3>{s.titre}</h3>
+              <p>{s.texte}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sable">
+    <div class="conteneur split">
+      <div class="split__photo"><Image photo="rendezVous" ratio={4 / 3} sizes="(min-width: 56rem) 36rem, 100vw" /></div>
+      <div>
+        <h2>Comment nous travaillons</h2>
+        <ol class="etapes">{etapes.map((e) => <li><h3>{e.titre}</h3><p>{e.texte}</p></li>)}</ol>
+      </div>
+    </div>
+  </section>
+
+  {articles.length > 0 && (
+    <section class="section">
+      <div class="conteneur">
+        <h2>Nos conseils aux professionnels</h2>
+        <ul class="cartes">{articles.map((art) => <CarteArticle article={art} />)}</ul>
+      </div>
+    </section>
+  )}
+
+  <div class="conteneur"><Rdv sujet="entreprises" titre="Faire auditer les contrats de votre entreprise" texte="Nous passons en revue vos garanties actuelles et vous disons, par écrit, ce qui manque et ce qui coûte trop cher." /></div>
+</Base>
+
+<style>
+  .garanties { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1.1rem; }
+  @media (min-width: 44rem) { .garanties { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 66rem) { .garanties { grid-template-columns: repeat(3, 1fr); } }
+  .garanties li { background: var(--blanc); border-radius: var(--rayon-photo); padding: 1.5rem; border-top: 4px solid var(--robine); box-shadow: 0 1px 0 var(--pierre); }
+  .garanties h3 { font-size: 1.22rem; }
+  .garanties p { margin: 0; color: var(--gris); }
+  .secteurs { display: grid; gap: clamp(2rem, 5vw, 3.5rem); margin-top: 2rem; }
+  .secteur { display: grid; gap: 1.2rem 2.5rem; align-items: center; }
+  .secteur :global(img) { border-radius: var(--rayon-photo); aspect-ratio: 3 / 2; object-fit: cover; width: 100%; }
+  .secteur h3 { font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.8rem); }
+  .secteur p { color: var(--gris); margin: 0; max-width: 46ch; }
+  @media (min-width: 56rem) {
+    .secteur { grid-template-columns: 1fr 1fr; }
+    .secteur--inverse :global(img) { order: 2; }
+  }
+  .etapes { list-style: none; counter-reset: etape; padding: 0; margin: 1.6rem 0 0; display: grid; gap: 1.3rem; }
+  .etapes li { counter-increment: etape; display: grid; grid-template-columns: 2.8rem 1fr; column-gap: 1rem; }
+  .etapes li::before {
+    content: counter(etape); grid-row: span 2; width: 2.8rem; height: 2.8rem; border-radius: 50%;
+    display: grid; place-items: center; background: var(--blanc); color: var(--robine-fonce);
+    font-family: var(--serif); font-weight: 650; font-size: 1.2rem;
+  }
+  .etapes h3 { margin: 0.35rem 0 0.2rem; font-size: 1.2rem; }
+  .etapes p { margin: 0; color: var(--gris); }
+</style>
