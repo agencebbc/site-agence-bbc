@@ -1,0 +1,57 @@
+---
+import { AGENCE } from '../data/agence';
+import { AVIS_AFFICHES, NOTE_GOOGLE } from '../data/avis';
+const fmtMois = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' });
+const fmtJour = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
+const etoiles = (n: number) => Array.from({ length: 5 }, (_, i) => i < Math.round(n));
+const note = NOTE_GOOGLE.note.toLocaleString('fr-FR');
+---
+<section class="section section--blanc avis" aria-labelledby="avis-titre">
+  <div class="conteneur">
+    <div class="avis__tete">
+      <div>
+        <h2 id="avis-titre">Ce que disent nos clients</h2>
+        <p class="avis__note">
+          <span class="etoiles" aria-hidden="true">{etoiles(NOTE_GOOGLE.note).map((p) => <span class={p ? 'plein' : ''}>★</span>)}</span>
+          <strong>{note}/5</strong> sur Google, {NOTE_GOOGLE.nombre} avis
+          <span class="avis__releve">(relevé le {fmtJour.format(new Date(NOTE_GOOGLE.releveLe))})</span>
+        </p>
+      </div>
+      <a class="bouton bouton--clair" href={AGENCE.google.avis} rel="noopener">Lire tous les avis sur Google</a>
+    </div>
+
+    {AVIS_AFFICHES.length > 0 && (
+      <>
+        <ul class="avis__liste">
+          {AVIS_AFFICHES.map((a) => (
+            <li>
+              <p class="etoiles" aria-label={`${a.note} étoiles sur 5`}>{etoiles(a.note).map((p) => <span class={p ? 'plein' : ''}>★</span>)}</p>
+              <blockquote>{a.texte}</blockquote>
+              <p class="avis__auteur">{a.auteur}, avis Google, {fmtMois.format(new Date(a.date))}</p>
+            </li>
+          ))}
+        </ul>
+        <p class="avis__mention">
+          Sélection d'avis 4 et 5 étoiles publiés sur notre fiche Google, reproduits sans modification.
+          L'ensemble des avis, positifs comme négatifs, est consultable sur Google.
+        </p>
+      </>
+    )}
+  </div>
+</section>
+
+<style>
+  .avis__tete { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem 2rem; }
+  .avis__tete h2 { margin-bottom: 0.4rem; }
+  .avis__note { margin: 0; font-size: 1.05rem; }
+  .avis__releve { color: var(--gris); font-size: 0.88rem; }
+  .etoiles { color: #c9cfdd; letter-spacing: 0.08em; margin-right: 0.4rem; font-size: 1.15rem; }
+  .etoiles .plein { color: #f2b01e; }
+  .avis__liste { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1.1rem; }
+  @media (min-width: 52rem) { .avis__liste { grid-template-columns: repeat(3, 1fr); } }
+  .avis__liste li { background: var(--fond); border-radius: var(--rayon-photo); padding: 1.4rem; display: flex; flex-direction: column; }
+  .avis__liste .etoiles { margin: 0 0 0.6rem; }
+  .avis__liste blockquote { margin: 0 0 1rem; font-family: var(--serif); font-size: 1.05rem; line-height: 1.6; flex: 1; }
+  .avis__auteur { margin: 0; font-size: 0.9rem; color: var(--gris); font-weight: 600; }
+  .avis__mention { margin: 1.3rem 0 0; font-size: 0.85rem; color: var(--gris); max-width: 70ch; }
+</style>

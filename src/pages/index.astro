@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Image from '../components/Image.astro';
 import Fleche from '../components/Fleche.astro';
 import CarteArticle from '../components/CarteArticle.astro';
+import Avis from '../components/Avis.astro';
 import { AGENCE, NOMS_AGENTS } from '../data/agence';
 import type { CleePhoto } from '../data/photos';
 
@@ -150,8 +151,10 @@ const etapes = [
     </div>
   </section>
 
+  <Avis />
+
   {articles.length > 0 && (
-    <section class="section section--blanc">
+    <section class="section">
       <div class="conteneur">
         <div class="tete-bloc">
           <h2>Nos derniers conseils</h2>
