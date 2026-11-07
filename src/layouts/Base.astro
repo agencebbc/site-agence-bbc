@@ -1,0 +1,54 @@
+---
+import '@fontsource-variable/literata';
+import '@fontsource-variable/schibsted-grotesk';
+import '../styles/global.css';
+import Entete from '../components/Entete.astro';
+import Pied from '../components/Pied.astro';
+import { AGENCE, INDEXATION } from '../data/agence';
+import { schemaAgence } from '../data/schema';
+
+interface Props {
+  titre: string;
+  description: string;
+  type?: 'website' | 'article';
+  jsonLd?: object[];
+  noindex?: boolean;
+}
+
+const { titre, description, type = 'website', jsonLd = [], noindex = false } = Astro.props;
+const site = Astro.site!;
+const canonique = new URL(Astro.url.pathname, site).href;
+const titreComplet = titre.includes(AGENCE.nomCourt) ? titre : `${titre} | ${AGENCE.nomCourt} Narbonne`;
+const fermer = noindex || !INDEXATION;
+const donnees = [schemaAgence(site), ...jsonLd];
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titreComplet}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonique} />
+    {fermer && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={AGENCE.nom} />
+    <meta property="og:title" content={titre} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonique} />
+    <meta name="theme-color" content="#12323a" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="Résumé du site pour les assistants IA" />
+    {donnees.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+  </head>
+  <body>
+    <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+    <Entete />
+    <main id="contenu">
+      <slot />
+    </main>
+    <Pied />
+  </body>
+</html>

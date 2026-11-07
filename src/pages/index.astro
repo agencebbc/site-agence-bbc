@@ -1,0 +1,201 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Rdv from '../components/Rdv.astro';
+import { AGENCE, CATEGORIES } from '../data/agence';
+import { typo } from '../data/typo';
+
+const articles = (await getCollection('conseils', ({ data }) => !data.brouillon)).sort(
+  (a, b) => (b.data.misAJour ?? b.data.publie).getTime() - (a.data.misAJour ?? a.data.publie).getTime(),
+);
+const derniers = articles.slice(0, 4);
+const fmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
+
+const verbes = [
+  { mot: 'Prévoir', texte: 'Épargner, préparer sa retraite, faire face à un arrêt de travail.' },
+  { mot: 'Protéger', texte: 'Assurer sa famille, son logement, son activité et ses salariés.' },
+  { mot: 'Transmettre', texte: 'Organiser son patrimoine et la suite pour ses proches.' },
+];
+const a = AGENCE;
+---
+<Base
+  titre="Agence d'assurance et de banque à Narbonne | Agence BBC"
+  description="Agence d'assurance et de banque à Narbonne : particuliers, indépendants, entreprises, épargne et retraite. Conseils clairs et rendez-vous avec nos agents généraux."
+>
+  <section class="hero conteneur">
+    <h1 class="hero__titre">Votre agence d'assurance et de banque à Narbonne</h1>
+    <p class="hero__chapo">
+      Cédric Couralet et Sébastien Baurain, agents généraux, et leurs {a.effectif} collaborateurs conseillent
+      les particuliers, les indépendants et les entreprises du Narbonnais. Sur ce site, des réponses claires à vos
+      questions ; à l'agence, quelqu'un pour vous aider à décider.
+    </p>
+    <ul class="verbes" aria-label={a.signature}>
+      {verbes.map((v, i) => (
+        <li class="verbe" style={`--i:${i}`}>
+          <span class="verbe__mot">{v.mot}</span>
+          <span class="verbe__texte">{v.texte}</span>
+        </li>
+      ))}
+    </ul>
+    <div class="hero__actions">
+      <a class="bouton" href="/contact/">Demander un rendez-vous</a>
+      <a class="bouton bouton--clair" href={`tel:${a.telephoneIntl}`}>Appeler le {a.telephone}</a>
+    </div>
+  </section>
+
+  <section class="conteneur bloc" aria-labelledby="conseils-titre">
+    <div class="bloc__tete">
+      <h2 id="conseils-titre">Nos dernières réponses</h2>
+      <a href="/conseils/">Tous les conseils</a>
+    </div>
+    <ul class="articles">
+      {derniers.map((art) => (
+        <li class="article-ligne">
+          <p class="article-ligne__cat">{CATEGORIES[art.data.categorie].titre}</p>
+          <h3><a href={`/conseils/${art.id}/`}>{typo(art.data.titre)}</a></h3>
+          <p>{typo(art.data.description)}</p>
+          <p class="article-ligne__date">Mis à jour le {fmt.format(art.data.misAJour ?? art.data.publie)}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="conteneur bloc" aria-labelledby="univers-titre">
+    <h2 id="univers-titre">Ce que nous assurons</h2>
+    <div class="univers">
+      {Object.entries(CATEGORIES).map(([id, c]) => (
+        <div class="univers__item">
+          <h3>{c.titre}</h3>
+          <p>{c.accroche}.</p>
+          <a href={`/contact/?sujet=${id}`}>En parler à l'agence</a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="conteneur bloc" aria-labelledby="agence-titre">
+    <h2 id="agence-titre">L'agence, au cœur de Narbonne</h2>
+    <div class="infos">
+      <div>
+        <p class="infos__label">Adresse</p>
+        <p>{a.adresse.rue}<br />{a.adresse.codePostal} {a.adresse.ville}</p>
+        <a href={a.google.itineraire} rel="noopener">Itinéraire</a>
+      </div>
+      <div>
+        <p class="infos__label">Horaires</p>
+        <p>{a.horaires.texte}</p>
+      </div>
+      <div>
+        <p class="infos__label">Téléphone</p>
+        <p><a href={`tel:${a.telephoneIntl}`}>{a.telephone}</a></p>
+        <a href={a.google.avis} rel="noopener">Lire nos avis Google</a>
+      </div>
+    </div>
+    <p class="infos__statut">
+      Agents généraux AXA, nous exerçons aussi une activité de courtage pour certains besoins des entreprises.{' '}
+      <a href="/agence/">Découvrir l'agence et l'équipe</a>
+    </p>
+  </section>
+
+  <div class="conteneur">
+    <Rdv titre="Une question sur votre situation ?" />
+  </div>
+</Base>
+
+<style>
+  .hero { padding-block: clamp(2.5rem, 6vw, 5rem) 1rem; }
+  .hero__titre {
+    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem);
+    max-width: 24ch;
+    margin-bottom: 0.8rem;
+  }
+  .hero__chapo { max-width: 58ch; font-size: 1.1rem; color: var(--encre); }
+
+  .verbes {
+    list-style: none;
+    padding: 0;
+    margin: 2.2rem 0 2.4rem;
+    border-top: 1px solid var(--pierre);
+  }
+  .verbe {
+    display: grid;
+    gap: 0.2rem 2rem;
+    padding: 0.9rem 0 1rem;
+    border-bottom: 1px solid var(--pierre);
+    animation: monte 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i) * 140ms + 100ms);
+  }
+  .verbe__mot {
+    font-family: var(--titre);
+    font-weight: 800;
+    font-size: clamp(2.8rem, 1.6rem + 6vw, 6.4rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    color: var(--encre);
+  }
+  .verbe:nth-child(2) .verbe__mot { color: var(--robine); }
+  .verbe__texte {
+    font-size: 1.05rem;
+    color: var(--gris);
+    max-width: 34ch;
+    align-self: end;
+  }
+  @media (min-width: 52rem) {
+    .verbe { grid-template-columns: minmax(0, 1fr) 20rem; align-items: end; }
+    .verbe__texte { padding-bottom: 0.5rem; }
+  }
+  @keyframes monte {
+    from { opacity: 0; transform: translateY(0.4em); }
+    to { opacity: 1; transform: none; }
+  }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+
+  .bloc { margin-top: clamp(3.5rem, 8vw, 6rem); }
+  .bloc h2 { margin-top: 0; }
+  .bloc__tete {
+    max-width: var(--mesure);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
+  .bloc__tete a { font-family: var(--titre); font-weight: 600; }
+
+  .articles { list-style: none; padding: 0; margin: 0; }
+  .article-ligne {
+    padding: 1.3rem 0;
+    border-top: 1px solid var(--pierre);
+    max-width: var(--mesure);
+  }
+  .article-ligne h3 { margin: 0.2rem 0 0.5rem; font-size: 1.3rem; }
+  .article-ligne h3 a { color: var(--encre); text-decoration: none; }
+  .article-ligne h3 a:hover { color: var(--robine); text-decoration: underline; }
+  .article-ligne p { margin-bottom: 0.4rem; }
+  .article-ligne__cat, .article-ligne__date {
+    font-family: var(--titre);
+    font-size: 0.88rem;
+    color: var(--gris);
+  }
+  .article-ligne__cat { color: var(--robine-fonce); font-weight: 600; }
+
+  .univers { display: grid; gap: 0 2.5rem; }
+  .univers__item { border-top: 3px solid var(--encre); padding: 1rem 0 1.6rem; }
+  .univers__item h3 { margin: 0 0 0.4rem; font-size: 1.2rem; }
+  .univers__item p { margin-bottom: 0.6rem; }
+  .univers__item a { font-family: var(--titre); font-weight: 600; }
+  @media (min-width: 44rem) { .univers { grid-template-columns: 1fr 1fr; } }
+
+  .infos { display: grid; gap: 1.2rem 2.5rem; }
+  .infos p { margin-bottom: 0.3rem; }
+  .infos a { font-family: var(--titre); font-weight: 600; }
+  .infos__label {
+    font-family: var(--titre);
+    font-weight: 700;
+    color: var(--gris);
+    font-size: 0.92rem;
+  }
+  .infos__statut { margin-top: 1.8rem; max-width: var(--mesure); }
+  @media (min-width: 52rem) { .infos { grid-template-columns: repeat(3, 1fr); } }
+</style>

@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import Rdv from '../components/Rdv.astro';
+import { AGENCE, AUTEURS } from '../data/agence';
+import { schemaFilAriane, schemaPersonne } from '../data/schema';
+
+const a = AGENCE;
+const site = Astro.site!;
+const jsonLd = [
+  ...Object.keys(AUTEURS).map((id) => ({ '@context': 'https://schema.org', ...schemaPersonne(site, id) })),
+  schemaFilAriane(site, [{ nom: 'Accueil', chemin: '/' }, { nom: "L'agence", chemin: '/agence/' }]),
+];
+const poles = [
+  { titre: 'Particuliers', texte: 'Auto, habitation, santé, prévoyance, épargne et crédit pour les familles.' },
+  { titre: 'Entreprises', texte: 'Artisans, commerçants, professions libérales et sociétés : biens, responsabilités, flottes, santé et prévoyance collectives.' },
+  { titre: 'Gestion et suivi', texte: 'Contrats, sinistres et démarches administratives, pour que chaque dossier avance.' },
+];
+---
+<Base
+  titre="L'agence et l'équipe"
+  description="L'agence BBC, agents généraux AXA à Narbonne : Cédric Couralet, Sébastien Baurain et une équipe de neuf collaborateurs, boulevard Marcel Sembat."
+  jsonLd={jsonLd}
+>
+  <div class="conteneur page">
+    <h1>L'agence et l'équipe</h1>
+    <p class="chapo">
+      Installée {a.adresse.rue} à {a.adresse.ville}, l'agence réunit deux agents généraux et {a.effectif} collaborateurs.
+      Notre métier : comprendre votre situation, vous expliquer vos options, puis vous accompagner dans la durée,
+      jusqu'au jour où vous avez besoin de votre assurance.
+    </p>
+
+    <h2>Les agents généraux</h2>
+    <div class="personnes">
+      {Object.values(AUTEURS).map((p) => (
+        <section class="personne" id={p.id}>
+          <h3>{p.nom}</h3>
+          <p class="personne__fonction">{p.fonction}</p>
+          <p>{p.bio}</p>
+        </section>
+      ))}
+    </div>
+
+    <h2>L'équipe, organisée en trois pôles</h2>
+    <ul class="poles">
+      {poles.map((p) => <li><strong>{p.titre}.</strong> {p.texte}</li>)}
+    </ul>
+
+    <h2>Notre statut</h2>
+    <p>
+      {a.reglementaire.statut}. Nous sommes immatriculés à l'ORIAS sous les numéros {a.reglementaire.orias.join(' et ')}
+      (<a href="https://www.orias.fr" rel="noopener">orias.fr</a>). Le détail de nos statuts, de la gestion des
+      réclamations et de la médiation figure dans les <a href="/mentions-legales/">mentions légales</a>.
+    </p>
+
+    <h2>Nous rendre visite</h2>
+    <p>
+      {a.adresse.rue}, {a.adresse.codePostal} {a.adresse.ville}.<br />
+      {a.horaires.texte}.<br />
+      Téléphone : <a href={`tel:${a.telephoneIntl}`}>{a.telephone}</a>.
+    </p>
+    <p><a href={a.google.itineraire} rel="noopener">Itinéraire</a> <span aria-hidden="true">/</span> <a href={a.google.avis} rel="noopener">Nos avis Google</a></p>
+
+    <Rdv />
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: clamp(2rem, 5vw, 3.5rem); }
+  .page > * { max-width: var(--mesure); }
+  .chapo { font-size: 1.1rem; }
+  .personnes { display: grid; gap: 1.2rem; }
+  .personne { border-top: 3px solid var(--encre); padding-top: 0.8rem; }
+  .personne h3 { margin: 0; }
+  .personne__fonction { font-family: var(--titre); color: var(--gris); margin-bottom: 0.4rem; }
+  .poles { padding-left: 1.2em; }
+  .poles li { margin-bottom: 0.6rem; }
+  .poles strong { font-family: var(--titre); }
+</style>

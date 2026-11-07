@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import { AGENCE } from '../../data/agence';
+---
+<Base titre="Demande envoyée" description="Votre demande a bien été transmise à l'agence BBC à Narbonne. Un conseiller vous rappelle rapidement." noindex>
+  <div class="conteneur page">
+    <h1>Demande envoyée</h1>
+    <p>Merci. Un conseiller de l'agence vous rappelle aux heures d'ouverture : {AGENCE.horaires.texte.toLowerCase()}.</p>
+    <p>Pour une urgence, appelez directement le <a href={`tel:${AGENCE.telephoneIntl}`}>{AGENCE.telephone}</a>.</p>
+    <p><a href="/conseils/">Parcourir nos conseils</a></p>
+  </div>
+</Base>
+<style>
+  .page { padding-top: clamp(2rem, 5vw, 3.5rem); max-width: var(--mesure); }
+</style>

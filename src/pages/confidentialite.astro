@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import A from '../components/A.astro';
+import { AGENCE } from '../data/agence';
+const a = AGENCE;
+---
+<Base titre="Politique de confidentialité" description="Comment l'agence BBC à Narbonne utilise et protège les données transmises via son site : finalités, durées de conservation, droits et contact.">
+  <div class="conteneur page prose">
+    <h1>Politique de confidentialité</h1>
+
+    <h2>Qui traite vos données ?</h2>
+    <p>
+      {a.nom}, {a.adresse.rue}, {a.adresse.codePostal} {a.adresse.ville}, est responsable des données que vous nous
+      transmettez par ce site.
+    </p>
+
+    <h2>Quelles données, et pourquoi ?</h2>
+    <p>
+      Le formulaire de contact recueille votre nom, votre téléphone, votre e-mail si vous le donnez, le sujet de votre
+      demande et votre message. Ces informations servent uniquement à vous recontacter et à préparer votre rendez-vous,
+      sur la base de votre consentement et des démarches que vous engagez avant un éventuel contrat.
+    </p>
+    <p>Ne transmettez pas d'informations de santé par ce formulaire.</p>
+
+    <h2>Combien de temps ?</h2>
+    <p>
+      Sans suite de votre part, vos données sont conservées trois ans après notre dernier échange, puis supprimées.
+      Si vous devenez client, elles rejoignent votre dossier et suivent les durées de conservation légales.
+    </p>
+
+    <h2>Qui y a accès ?</h2>
+    <p>
+      Les collaborateurs de l'agence chargés de votre demande, et notre hébergeur, {a.hebergeur.nom}, qui reçoit les
+      formulaires pour notre compte. Cette société étant établie aux États-Unis, les transferts sont encadrés par les
+      garanties prévues par le règlement européen (RGPD). Vos données ne sont ni vendues ni cédées.
+    </p>
+
+    <h2>Cookies</h2>
+    <p>Ce site n'utilise aucun cookie publicitaire ni de mesure d'audience.</p>
+
+    <h2>Vos droits</h2>
+    <p>
+      Vous pouvez accéder à vos données, les faire rectifier ou effacer, vous opposer à leur utilisation ou en demander
+      la limitation et la portabilité. Écrivez à l'agence ({a.adresse.rue}, {a.adresse.codePostal} {a.adresse.ville})
+      ou à <A v={a.email} />. Vous pouvez aussi saisir la CNIL (<a href="https://www.cnil.fr" rel="noopener">cnil.fr</a>).
+    </p>
+  </div>
+</Base>
+<style>
+  .page { padding-top: clamp(2rem, 5vw, 3.5rem); }
+</style>

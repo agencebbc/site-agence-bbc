@@ -1,0 +1,9 @@
+---
+// Affiche une valeur ; si elle n'est pas encore renseignée, la signale visuellement.
+import { A_COMPLETER } from '../data/agence';
+interface Props { v: string }
+const { v } = Astro.props;
+const manquant = v.includes(A_COMPLETER);
+const texte = v.replace(A_COMPLETER, '').trim();
+---
+{texte}{manquant && <span class="a-completer">{texte ? ' ' : ''}à compléter</span>}

@@ -1,0 +1,76 @@
+---
+import { AGENCE } from '../data/agence';
+const a = AGENCE;
+const annee = new Date().getFullYear();
+---
+<footer class="pied">
+  <div class="conteneur pied__grille">
+    <div>
+      <p class="pied__marque">{a.nom}</p>
+      <p class="pied__signature">{a.signature}</p>
+    </div>
+    <div>
+      <h2 class="pied__titre">Nous trouver</h2>
+      <p>
+        {a.adresse.rue}<br />
+        {a.adresse.codePostal} {a.adresse.ville}<br />
+        <a href={`tel:${a.telephoneIntl}`}>{a.telephone}</a>
+      </p>
+      <p>{a.horaires.texte}</p>
+    </div>
+    <div>
+      <h2 class="pied__titre">Le site</h2>
+      <ul>
+        <li><a href="/conseils/">Conseils</a></li>
+        <li><a href="/agence/">L'agence et l'équipe</a></li>
+        <li><a href="/contact/">Contact et rendez-vous</a></li>
+        <li><a href={a.google.avis} rel="noopener">Nos avis Google</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="conteneur pied__legal">
+    <p>
+      {a.reglementaire.statut}. Immatriculations ORIAS n° {a.reglementaire.orias.join(' et n° ')}, vérifiables sur{' '}
+      <a href="https://www.orias.fr" rel="noopener">orias.fr</a>.
+    </p>
+    <p>
+      <a href="/mentions-legales/">Mentions légales</a>
+      <span aria-hidden="true">  /  </span>
+      <a href="/confidentialite/">Confidentialité</a>
+      <span aria-hidden="true">  /  </span>
+      © {annee} {a.nomCourt}
+    </p>
+  </div>
+</footer>
+
+<style>
+  .pied {
+    background: var(--encre);
+    color: #dbe6e6;
+    margin-top: 5rem;
+    font-family: var(--titre);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .pied a { color: var(--blanc); }
+  .pied__grille {
+    display: grid;
+    gap: 1.8rem;
+    padding-block: 3rem 2rem;
+  }
+  .pied__marque { font-size: 1.2rem; font-weight: 800; color: var(--blanc); margin: 0; }
+  .pied__signature { color: var(--salin); margin: 0.2rem 0 0; }
+  .pied__titre { font-size: 0.95rem; font-weight: 700; color: var(--blanc); margin: 0 0 0.6rem; }
+  .pied ul { list-style: none; padding: 0; margin: 0; }
+  .pied li { margin-bottom: 0.35rem; }
+  .pied__legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-block: 1.4rem 2rem;
+    font-size: 0.85rem;
+    color: #b7c8c9;
+  }
+  .pied__legal p { margin: 0 0 0.6rem; }
+  @media (min-width: 52rem) {
+    .pied__grille { grid-template-columns: 1.3fr 1fr 1fr; }
+  }
+</style>

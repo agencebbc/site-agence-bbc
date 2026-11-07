@@ -1,0 +1,103 @@
+---
+import Base from '../../layouts/Base.astro';
+import { AGENCE, CATEGORIES } from '../../data/agence';
+const a = AGENCE;
+---
+<Base
+  titre="Contact et rendez-vous"
+  description="Contactez l'agence BBC à Narbonne : téléphone, adresse, horaires et formulaire de demande de rendez-vous avec un conseiller."
+>
+  <div class="conteneur page">
+    <h1>Contact et rendez-vous</h1>
+    <p class="chapo">
+      Appelez-nous au <a href={`tel:${a.telephoneIntl}`}>{a.telephone}</a> ou laissez votre demande ci-dessous :
+      un conseiller vous rappelle pour fixer un rendez-vous, à l'agence ou par téléphone.
+    </p>
+
+    <form class="formulaire" name="contact" method="POST" action="/contact/merci/" data-netlify="true" netlify-honeypot="site-web">
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="piege"><label>Ne pas remplir : <input name="site-web" tabindex="-1" autocomplete="off" /></label></p>
+
+      <label for="nom">Nom et prénom</label>
+      <input id="nom" name="nom" autocomplete="name" required />
+
+      <label for="telephone">Téléphone</label>
+      <input id="telephone" name="telephone" type="tel" autocomplete="tel" required />
+
+      <label for="email">E-mail <span class="facultatif">(facultatif)</span></label>
+      <input id="email" name="email" type="email" autocomplete="email" />
+
+      <label for="sujet">Votre demande concerne</label>
+      <select id="sujet" name="sujet">
+        {Object.entries(CATEGORIES).map(([id, c]) => <option value={id}>{c.titre}</option>)}
+        <option value="autre">Autre demande</option>
+      </select>
+
+      <label for="message">Votre message</label>
+      <textarea id="message" name="message" rows="5"></textarea>
+      <p class="aide">N'indiquez pas d'informations de santé dans ce formulaire : nous en parlerons de vive voix si nécessaire.</p>
+
+      <label class="consentement">
+        <input type="checkbox" name="consentement" value="oui" required />
+        <span>J'accepte que l'agence utilise ces informations pour me recontacter au sujet de ma demande.</span>
+      </label>
+
+      <button class="bouton" type="submit">Envoyer ma demande</button>
+      <p class="aide">
+        Vos données servent uniquement à répondre à votre demande. Voir notre
+        <a href="/confidentialite/">politique de confidentialité</a>.
+      </p>
+    </form>
+
+    <h2>L'agence</h2>
+    <p>
+      {a.adresse.rue}, {a.adresse.codePostal} {a.adresse.ville}<br />
+      {a.horaires.texte}<br />
+      <a href={a.google.itineraire} rel="noopener">Itinéraire</a>
+    </p>
+  </div>
+</Base>
+
+<script is:inline>
+  (function () {
+    var s = new URLSearchParams(location.search).get('sujet');
+    var champ = document.getElementById('sujet');
+    if (s && champ && champ.querySelector('option[value="' + s + '"]')) champ.value = s;
+  })();
+</script>
+
+<style>
+  .page { padding-top: clamp(2rem, 5vw, 3.5rem); }
+  .page > * { max-width: var(--mesure); }
+  .chapo { font-size: 1.1rem; }
+  .formulaire {
+    display: grid;
+    gap: 0.35rem;
+    background: var(--blanc);
+    border: 1px solid var(--pierre);
+    border-radius: var(--rayon);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    font-family: var(--titre);
+  }
+  .formulaire label { font-weight: 600; margin-top: 0.7rem; }
+  .facultatif { font-weight: 400; color: var(--gris); }
+  .formulaire input:not([type='checkbox']),
+  .formulaire select,
+  .formulaire textarea {
+    font: inherit;
+    font-size: 1rem;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid #9fb2b3;
+    border-radius: var(--rayon);
+    background: var(--blanc);
+    color: var(--encre);
+    width: 100%;
+  }
+  .formulaire textarea { resize: vertical; }
+  .consentement { display: flex; gap: 0.6rem; align-items: flex-start; font-weight: 400 !important; margin-top: 1rem !important; }
+  .consentement input { margin-top: 0.3rem; width: 1.1rem; height: 1.1rem; flex: none; }
+  .formulaire .bouton { justify-self: start; margin-top: 1rem; }
+  .aide { font-size: 0.88rem; color: var(--gris); margin: 0.3rem 0 0; }
+  .piege { position: absolute; left: -9999px; }
+</style>

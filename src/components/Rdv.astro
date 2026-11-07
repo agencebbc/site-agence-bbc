@@ -1,0 +1,31 @@
+---
+import { AGENCE } from '../data/agence';
+interface Props { sujet?: string; titre?: string }
+const { sujet, titre = 'Faire le point avec un conseiller' } = Astro.props;
+const lienRdv = sujet ? `/contact/?sujet=${sujet}` : '/contact/';
+---
+<section class="rdv" aria-label="Prendre rendez-vous">
+  <h2 class="rdv__titre">{titre}</h2>
+  <p>
+    À l'agence, boulevard Marcel Sembat à Narbonne, ou par téléphone :
+    nous regardons votre situation et vous disons ce qui a du sens pour vous.
+  </p>
+  <div class="rdv__actions">
+    <a class="bouton" href={lienRdv}>Demander un rendez-vous</a>
+    <a class="bouton bouton--clair" href={`tel:${AGENCE.telephoneIntl}`}>Appeler le {AGENCE.telephone}</a>
+  </div>
+</section>
+
+<style>
+  .rdv {
+    margin: 3rem 0 0;
+    padding: 1.6rem 1.5rem;
+    background: var(--blanc);
+    border: 1px solid var(--pierre);
+    border-left: 6px solid var(--robine);
+    border-radius: var(--rayon);
+  }
+  .rdv__titre { margin: 0 0 0.5rem; font-size: 1.35rem; }
+  .rdv p { margin-bottom: 1.1rem; }
+  .rdv__actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+</style>

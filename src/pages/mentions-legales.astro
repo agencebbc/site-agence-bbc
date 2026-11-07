@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import A from '../components/A.astro';
+import { AGENCE, A_COMPLETER } from '../data/agence';
+const a = AGENCE;
+const r = a.reglementaire;
+---
+<Base titre="Mentions légales" description="Mentions légales du site de l'agence BBC à Narbonne : éditeur, hébergeur, statut d'intermédiaire d'assurance, réclamations et médiation.">
+  <div class="conteneur page prose">
+    <h1>Mentions légales</h1>
+
+    <h2>Éditeur du site</h2>
+    <p>
+      {a.nom}, enseigne de la {r.structure}.<br />
+      Agents généraux : Cédric Couralet et Sébastien Baurain.<br />
+      {a.adresse.rue}, {a.adresse.codePostal} {a.adresse.ville}.<br />
+      Téléphone : {a.telephone}. E-mail : <A v={a.email} />.<br />
+      SIREN : <A v={r.siren} />.
+    </p>
+    <p>Directeur de la publication : {a.directeurPublication}.</p>
+
+    <h2>Hébergement</h2>
+    <p>{a.hebergeur.nom}, <A v={a.hebergeur.adresse} /> (<a href={a.hebergeur.site} rel="noopener">netlify.com</a>).</p>
+
+    <h2>Statut d'intermédiaire</h2>
+    <p>
+      {r.statut}. Immatriculations au registre unique des intermédiaires en assurance, banque et finance (ORIAS)
+      sous les numéros {r.orias.join(' et ')}, consultables sur <a href="https://www.orias.fr" rel="noopener">orias.fr</a>.
+    </p>
+    <p>Intermédiaire en opérations de banque et en services de paiement : <A v={r.iobsp} />.</p>
+    <p>Autorité de contrôle : {r.acpr.nom}, {r.acpr.adresse}.</p>
+
+    <h2>Réclamations et médiation</h2>
+    <p>
+      Pour toute réclamation, adressez-vous d'abord à l'agence, par courrier au {a.adresse.rue}, {a.adresse.codePostal} {a.adresse.ville},
+      ou par téléphone au {a.telephone}. Nous accusons réception de votre réclamation sous dix jours ouvrables et y répondons
+      dans un délai de deux mois au plus.
+    </p>
+    <p>Si la réponse ne vous satisfait pas, vous pouvez saisir le service réclamations de la compagnie concernée : <A v={A_COMPLETER} />.</p>
+    <p>
+      En dernier recours, vous pouvez saisir gratuitement {r.mediateur.nom}, {r.mediateur.adresse},
+      <a href={r.mediateur.site} rel="noopener">mediation-assurance.org</a>.
+    </p>
+
+    <h2>Contenus du site</h2>
+    <p>
+      Les articles publiés sur ce site sont des contenus d'information générale. Ils ne constituent pas un conseil
+      personnalisé, qui suppose l'analyse de votre situation et de vos besoins. Les textes et éléments graphiques du site
+      sont la propriété de l'agence ; leur reproduction nécessite son accord préalable.
+    </p>
+  </div>
+</Base>
+<style>
+  .page { padding-top: clamp(2rem, 5vw, 3.5rem); }
+</style>

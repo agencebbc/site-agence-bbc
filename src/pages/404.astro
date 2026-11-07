@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { AGENCE } from '../data/agence';
+---
+<Base titre="Page introuvable" description="Cette page n'existe pas ou a été déplacée. Retrouvez les conseils de l'agence BBC à Narbonne ou contactez-nous." noindex>
+  <div class="conteneur page">
+    <h1>Cette page n'existe pas</h1>
+    <p>Elle a peut-être été déplacée. Vous trouverez tous nos articles dans la rubrique <a href="/conseils/">Conseils</a>.</p>
+    <p>Une question ? Appelez l'agence au <a href={`tel:${AGENCE.telephoneIntl}`}>{AGENCE.telephone}</a>.</p>
+  </div>
+</Base>
+<style>
+  .page { padding-top: clamp(2rem, 5vw, 3.5rem); max-width: var(--mesure); }
+</style>

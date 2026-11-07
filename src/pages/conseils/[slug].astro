@@ -1,0 +1,207 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Rdv from '../../components/Rdv.astro';
+import { AUTEURS, CATEGORIES } from '../../data/agence';
+import { idAgence, schemaFilAriane, schemaPersonne } from '../../data/schema';
+import { typo } from '../../data/typo';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('conseils', ({ data }) => !data.brouillon);
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article, articles } }));
+}
+
+const { article, articles } = Astro.props;
+const { data } = article;
+const { Content, headings } = await render(article);
+const site = Astro.site!;
+const auteur = AUTEURS[data.auteur];
+const categorie = CATEGORIES[data.categorie];
+const url = new URL(Astro.url.pathname, site).href;
+const misAJour = data.misAJour ?? data.publie;
+const fmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
+const minutes = Math.max(1, Math.round((article.body ?? '').split(/\s+/).length / 220));
+const sommaire = headings.filter((h) => h.depth === 2);
+const lies = articles.filter((a) => a.id !== article.id && a.data.categorie === data.categorie).slice(0, 3);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: data.titre,
+    description: data.description,
+    inLanguage: 'fr-FR',
+    datePublished: data.publie.toISOString(),
+    dateModified: misAJour.toISOString(),
+    mainEntityOfPage: url,
+    url,
+    author: schemaPersonne(site, data.auteur),
+    publisher: { '@id': idAgence(site) },
+    articleSection: categorie.titre,
+  },
+  ...(data.faq.length
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: data.faq.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.r },
+        })),
+      }]
+    : []),
+  schemaFilAriane(site, [
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Conseils', chemin: '/conseils/' },
+    { nom: data.titre, chemin: Astro.url.pathname },
+  ]),
+];
+---
+<Base titre={data.titre} description={data.description} type="article" jsonLd={jsonLd}>
+  <article class="conteneur article">
+    <nav class="ariane" aria-label="Fil d'Ariane">
+      <a href="/">Accueil</a>{' '}<span aria-hidden="true">/</span>{' '}
+      <a href="/conseils/">Conseils</a>{' '}<span aria-hidden="true">/</span>{' '}
+      <span>{categorie.titre}</span>
+    </nav>
+
+    <header class="article__tete">
+      <h1>{typo(data.titre)}</h1>
+      <p class="article__meta">
+        Par <a href={`/agence/#${auteur.id}`}>{auteur.nom}</a>, {auteur.fonction.toLowerCase()} à Narbonne.{' '}
+        Mis à jour le <time datetime={misAJour.toISOString()}>{fmt.format(misAJour)}</time>.
+        Lecture : {minutes} min.
+      </p>
+    </header>
+
+    <section class="essentiel" aria-labelledby="essentiel-titre">
+      <h2 id="essentiel-titre">L'essentiel</h2>
+      <ul>{data.essentiel.map((e) => <li>{typo(e)}</li>)}</ul>
+    </section>
+
+    {sommaire.length > 2 && (
+      <details class="sommaire">
+        <summary>Sommaire</summary>
+        <ol>{sommaire.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+      </details>
+    )}
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {data.faq.length > 0 && (
+      <section class="faq" aria-labelledby="faq-titre">
+        <h2 id="faq-titre">Questions fréquentes</h2>
+        {data.faq.map((f) => (
+          <details>
+            <summary>{typo(f.q)}</summary>
+            <p>{typo(f.r)}</p>
+          </details>
+        ))}
+      </section>
+    )}
+
+    <Rdv sujet={data.categorie} />
+
+    <footer class="article__pied">
+      <div class="auteur" id="auteur">
+        <p class="auteur__nom">{auteur.nom}</p>
+        <p class="auteur__fonction">{auteur.fonction}, {`Agence BBC à Narbonne`}</p>
+        <p>{auteur.bio}</p>
+      </div>
+
+      {data.sources.length > 0 && (
+        <div class="sources">
+          <h2>Sources</h2>
+          <ul>
+            {data.sources.map((s) => (
+              <li>{s.url ? <a href={s.url} rel="noopener">{s.titre}</a> : s.titre}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <p class="avertissement">
+        Article d'information générale, à jour de la réglementation en vigueur le {fmt.format(misAJour)}.
+        Il ne remplace pas un conseil adapté à votre situation, que nous vous apportons en rendez-vous.
+      </p>
+    </footer>
+
+    {lies.length > 0 && (
+      <aside class="lies" aria-labelledby="lies-titre">
+        <h2 id="lies-titre">À lire aussi</h2>
+        <ul>{lies.map((a) => <li><a href={`/conseils/${a.id}/`}>{typo(a.data.titre)}</a></li>)}</ul>
+      </aside>
+    )}
+  </article>
+</Base>
+
+<style>
+  .article { padding-top: 1.5rem; }
+  .article > * { max-width: var(--mesure); }
+  .ariane {
+    font-family: var(--titre);
+    font-size: 0.88rem;
+    color: var(--gris);
+    margin-bottom: 1.5rem;
+  }
+  .ariane a { color: var(--gris); }
+  .article__meta {
+    font-family: var(--titre);
+    font-size: 0.92rem;
+    color: var(--gris);
+    line-height: 1.5;
+  }
+  .essentiel {
+    background: var(--salin);
+    border-radius: var(--rayon);
+    padding: 1.3rem 1.4rem 0.6rem;
+    margin: 1.8rem 0;
+  }
+  .essentiel h2 { font-size: 1.1rem; margin: 0 0 0.7rem; }
+  .essentiel ul { padding-left: 1.2em; margin: 0 0 0.8rem; }
+  .essentiel li { margin-bottom: 0.55em; }
+  .sommaire {
+    font-family: var(--titre);
+    border: 1px solid var(--pierre);
+    border-radius: var(--rayon);
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 1.5rem;
+    background: var(--blanc);
+  }
+  .sommaire summary { font-weight: 650; cursor: pointer; }
+  .sommaire ol { margin: 0.8rem 0 0.3rem; padding-left: 1.3em; line-height: 1.5; }
+  .sommaire li { margin-bottom: 0.4rem; }
+  .faq { margin-top: 2.5rem; }
+  .faq details {
+    border-bottom: 1px solid var(--pierre);
+    padding: 0.9rem 0;
+  }
+  .faq summary {
+    font-family: var(--titre);
+    font-weight: 650;
+    font-size: 1.05rem;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  .faq details p { margin: 0.7rem 0 0.2rem; }
+  .article__pied { margin-top: 3rem; }
+  .auteur {
+    border-top: 3px solid var(--encre);
+    padding-top: 1.2rem;
+    font-size: 0.98rem;
+  }
+  .auteur__nom { font-family: var(--titre); font-weight: 750; font-size: 1.1rem; margin: 0; }
+  .auteur__fonction { font-family: var(--titre); color: var(--gris); margin: 0 0 0.6rem; font-size: 0.92rem; }
+  .sources h2 { font-size: 1rem; margin-top: 2rem; }
+  .sources ul { padding-left: 1.2em; font-size: 0.92rem; line-height: 1.55; }
+  .avertissement {
+    font-size: 0.88rem;
+    color: var(--gris);
+    margin-top: 1.5rem;
+    line-height: 1.55;
+  }
+  .lies { margin-top: 2.5rem; }
+  .lies h2 { font-size: 1.2rem; }
+</style>
