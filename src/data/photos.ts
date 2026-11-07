@@ -47,6 +47,12 @@ export const PHOTOS = {
     auteur: 'Ricardo Gomez Angel',
     page: 'https://unsplash.com/photos/7bzbyafVTYg',
   },
+  maisonChantier: {
+    id: 'photo-1693639767415-27ff64ce4da2',
+    alt: 'Maison neuve en construction, charpente et tuiles posées, échafaudages autour',
+    auteur: 'Troy Mortier',
+    page: 'https://unsplash.com/photos/rxfWPJUUClo',
+  },
   couple: {
     id: 'photo-1673266966985-cad612eb13db',
     alt: 'Un couple marche main dans la main au bord de la mer',
