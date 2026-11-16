@@ -11,12 +11,12 @@ essentiel:
   - "Travailler sans décennale est un délit puni de six mois d'emprisonnement et de 75 000 € d'amende (article L243-3 du Code des assurances) ; surtout, vous payez vous-même les réparations pendant dix ans."
   - "Chaque devis et chaque facture doit mentionner l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique, avec une attestation conforme au modèle officiel de 2016."
   - "Seules les activités déclarées au contrat sont couvertes : un artisan qui réalise des travaux non déclarés n'est pas assuré pour ces travaux."
-  - "À l'agence, l'assurance décennale d'un artisan démarre à partir de 800 € TTC par an, soit environ 67 € par mois, selon le métier, le chiffre d'affaires, l'expérience et les antécédents (tarif constaté en novembre 2026, sous réserve d'étude)."
+  - "À l'agence, l'assurance décennale d'un artisan démarre à partir de 65 € TTC par mois, soit 780 € par an, selon le métier, le chiffre d'affaires, l'expérience et les antécédents (tarif constaté en novembre 2026, sous réserve d'étude)."
 faq:
   - q: "L'assurance décennale est-elle obligatoire pour un auto-entrepreneur ?"
     r: "Oui. L'obligation dépend de la nature des travaux, pas du statut. Un micro-entrepreneur qui réalise des travaux de construction ou de rénovation susceptibles d'engager sa responsabilité décennale doit être assuré dès son premier chantier."
   - q: "Combien coûte une assurance décennale ?"
-    r: "Il n'existe pas de prix unique. À l'agence, elle démarre à partir de 800 € TTC par an, soit environ 67 € par mois, pour un artisan du second œuvre au chiffre d'affaires modeste et sans sinistre (tarif constaté en novembre 2026). Le gros œuvre, la couverture et l'étanchéité coûtent plus cher. Nous établissons un tarif précis après étude de votre activité."
+    r: "Il n'existe pas de prix unique. À l'agence, elle démarre à partir de 65 € TTC par mois, soit 780 € par an, pour un artisan du second œuvre au chiffre d'affaires modeste et sans sinistre (tarif constaté en novembre 2026). Le gros œuvre, la couverture et l'étanchéité coûtent plus cher. Nous établissons un tarif précis après étude de votre activité."
   - q: "Je suis sous-traitant : dois-je avoir une décennale ?"
     r: "La loi ne l'impose pas au sous-traitant, qui n'a pas de contrat direct avec le client. Mais l'entreprise principale l'exige presque toujours et peut se retourner contre vous en cas de désordre. Un contrat qui couvre aussi vos travaux en sous-traitance est vivement conseillé."
   - q: "Que se passe-t-il si je change d'assureur ou si j'arrête mon activité ?"
@@ -165,13 +165,13 @@ Il n'existe pas de prix unique. La cotisation dépend :
 - de vos **antécédents de sinistres** ;
 - du **niveau de garanties et de franchise** choisi.
 
-À l'agence, l'assurance décennale d'un artisan démarre **à partir de 800 € TTC par an**, soit environ 67 € par mois, pour un artisan du second œuvre au chiffre d'affaires modeste et sans sinistre (tarif constaté en novembre 2026). Pour le gros œuvre, la couverture ou l'étanchéité, comptez davantage. Le plus simple est de nous laisser étudier votre activité.
+À l'agence, l'assurance décennale d'un artisan démarre **à partir de 65 € TTC par mois**, soit 780 € par an, pour un artisan du second œuvre au chiffre d'affaires modeste et sans sinistre (tarif constaté en novembre 2026). Pour le gros œuvre, la couverture ou l'étanchéité, comptez davantage. Le plus simple est de nous laisser étudier votre activité.
 
 <div class="encart-offre">
-<p class="encart-offre__titre">Votre assurance décennale à partir de 800 € TTC par an*</p>
+<p class="encart-offre__titre">Votre assurance décennale à partir de 65 € TTC par mois*</p>
 <p>Artisan, micro-entrepreneur ou entreprise du bâtiment à Narbonne et dans l'Aude : demandez une étude de votre décennale et de votre responsabilité civile professionnelle, sans engagement.</p>
 <p><a class="bouton" href="/contact/?sujet=professionnels">Demander mon étude décennale</a></p>
-<p class="encart-offre__mention">* Tarif TTC annuel constaté par l'agence en novembre 2026 pour un artisan du second œuvre, au chiffre d'affaires modeste, sans sinistre déclaré. Le tarif varie selon l'activité, le chiffre d'affaires, l'expérience et les antécédents. Offre soumise à étude et à acceptation du risque par l'assureur, dans les limites et conditions du contrat.</p>
+<p class="encart-offre__mention">* Tarif TTC mensuel (780 € TTC par an) constaté par l'agence en novembre 2026 pour un artisan du second œuvre, au chiffre d'affaires modeste, sans sinistre déclaré. Le tarif varie selon l'activité, le chiffre d'affaires, l'expérience et les antécédents. Offre soumise à étude et à acceptation du risque par l'assureur, dans les limites et conditions du contrat.</p>
 </div>
 
 ## Nos conseils pour être bien assuré
